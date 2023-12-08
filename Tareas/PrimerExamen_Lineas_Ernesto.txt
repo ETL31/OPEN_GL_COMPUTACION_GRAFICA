@@ -1,0 +1,139 @@
+#include <windows.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+#include<cmath>
+#include <stdlib.h>
+#define M_PI 3.1415
+
+float blanco[]={1,1,1};
+float negro[]={0,0,0},azul[]={0,0,1};
+float rojo[]={1,0,0},verde[]={0,1,0}, amarillo[]={1,1,0};
+float cyan[]={0,1,1}, rosa[]={1,0.5,0.5}, naranja[]={1,0.8,0}, gris[]={0.6,0.6,0.6};
+
+void inicio ()
+{
+    glMatrixMode(GL_PROJECTION);
+    int a=10;
+    gluOrtho2D(-a,a,-a,a);
+}
+
+void lineales(float x, float y, float w, float z, float *color, float s)
+{
+    glColor3fv(color);
+    glLineWidth(s);
+    glBegin(GL_LINE_LOOP);
+    glVertex2f(x,y);
+    glVertex2f(w,z);
+
+    glEnd();
+
+}
+
+
+
+void display(void)
+{
+glClearColor(1,1,1,1);
+glClear(GL_COLOR_BUFFER_BIT);
+
+
+    lineales(-3.13333,1.24667,-3.73333,2.36667,negro,4);
+    lineales(-3.13333,1.24667,-3.76,0.16667,negro,4);
+
+    lineales(-2.48,2.38,-3.73333,2.36667,negro,4);
+    lineales(-2.48,2.38,-1.85333,3.43333,negro,4);
+
+    lineales(-0.56,3.44667,-1.85333,3.43333,negro,4);
+    lineales(-0.56,3.44667,0,4.49,negro,4);
+
+    lineales(0.61333,3.42,0,4.49,negro,4);
+    lineales(0.61333,3.42,1.86667,3.35333,negro,4);
+
+    lineales(2.46667,2.27333,1.86667,3.35333,negro,4);
+    lineales(2.46667,2.27333,3.74667,2.23333,negro,4);
+
+    lineales(3.17333,1.12667,3.74667,2.23333,negro,4);
+    lineales(3.17333,1.12667,3.68,0,negro,4);
+
+    lineales(3.13333,-1.14,3.68,0,negro,4);
+    lineales(3.13333,-1.14,3.66667,-2.16667,negro,4);
+
+    lineales(2.48,-2.23333,3.66667,-2.16667,negro,4);
+    lineales(2.48,-2.23333,1.84,-3.20667,negro,4);
+
+    lineales (0,4.49,-0.06667,-4.3,negro,4);
+    lineales(-3.73333,2.36667,3.66667,-2.16667,negro,4);
+    lineales(-3.76,0.16667,1.86667,3.35333,negro,4);
+    lineales(-3.81333,-2.08667,3.74667,2.23333,negro,4);
+    lineales(-1.93333,-3.16667,3.68,0,negro,4);
+    lineales(-1.85333,3.43333,3.68,0,negro,4);
+    lineales(-3.76,0.16667,1.84,-3.20667,negro,4);
+    lineales(-1.85333,3.43333,-1.93333,-3.16667,negro,4);
+    lineales(1.86667,3.35333,1.84,-3.20667,negro,4);
+    lineales(-0.64,1.22,-1.89333,1.24667,negro,4);
+    lineales(-0.64,1.22,0,0,negro,4);
+    lineales(-0.64,1.22,0,2.27,negro,4);
+    lineales(0.6,1.18,0,0,negro,4);
+    lineales(0.6,1.18,0,2.27,negro,4);
+    lineales(0.6,1.18,1.88,1.18,negro,4);
+    lineales(0.58667,-1.06,1.84,-1.06,negro,4);
+    lineales(0.58667,-1.06,0,-2.17,negro,4);
+    lineales(0.58667,-1.06,0,0,negro,4);
+    lineales(1.25333,0.07333,1.88,1.18,negro,4);
+    lineales(1.25333,0.07333,0,0,negro,4);
+    lineales(1.25333,0.07333,1.84,-1.06,negro,4);
+    lineales(0,0,-0.65333,-1.02,negro,4);
+    lineales(-0.65333,-1.02,0,-2.17,negro,4);
+    lineales(-0.65333,-1.02,-1.86667,-0.99333,negro,4);
+    lineales(-1.86667,-0.99333,-1.30667,0.12667,negro,4);
+    lineales(0,0,-1.30667,0.12667,negro,4);
+    lineales(-1.89333,1.24667,-1.30667,0.12667,negro,4);
+    lineales(1.25333,2.3,1.86667,3.35333,negro,4);
+    lineales(1.25333,2.3,0,2.27,negro,4);
+    lineales(1.25333,2.3,1.88,1.18,negro,4);
+    lineales(2.47,0,3.68,0,negro,4);
+    lineales(2.47,0,1.88,1.18,negro,4);
+    lineales(2.47,0,1.84,-1.06,negro,4);
+    lineales(1.22667,-2.16667,1.84,-1.06,negro,4);
+    lineales(1.22667,-2.16667,0,-2.17,negro,4);
+    lineales(1.22667,-2.16667,1.84,-3.20667,negro,4);
+    lineales(-1.32,-2.15333,0,-2.17,negro,4);
+    lineales(-1.32,-2.15333,-1.86667,-0.99333,negro,4);
+    lineales(-1.32,-2.15333,-1.93333,-3.16667,negro,4);
+    lineales(-2.49333,0.19333,-3.76,0.16667,negro,4);
+    lineales(-2.49333,0.19333,-1.86667,-0.99333,negro,4);
+    lineales(-2.49333,0.19333,-1.89333,1.24667,negro,4);
+    lineales(-1.28,2.35333,-1.85333,3.43333,negro,4);
+    lineales(-1.28,2.35333,0,2.27,negro,4);
+    lineales(-1.28,2.35333,-1.89333,1.24667,negro,4);
+
+
+
+
+
+    glutSwapBuffers();
+}
+
+
+int main(int argc, char *argv[])
+{
+    glutInit(&argc, argv); //Inicializar la ventana
+
+    glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE|GLUT_DEPTH);//Especifica el tipo de modo de visualizacion al crear una ventana(Activa el buffer de colores de tipo RGB
+
+    glutInitWindowPosition(10,10);//Posicion de la ventana
+    glutInitWindowSize(600,600); //Tamaño de la ventana
+    glutCreateWindow("Pregunta1"); //Nombre que se le da a la ventana
+    glutDisplayFunc(display);
+
+
+    inicio();
+
+
+    glutMainLoop(); //Hace que aparezca la ventana
+    return EXIT_SUCCESS; //Puedes colocar tambien Return 0
+
+}

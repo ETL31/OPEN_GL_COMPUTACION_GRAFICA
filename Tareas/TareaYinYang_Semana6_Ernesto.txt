@@ -1,0 +1,102 @@
+#include <windows.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+#include<cmath>
+#include <stdlib.h>
+#define M_PI 3.1415
+
+float blanco[]={1,1,1};
+float negro[]={0,0,0},azul[]={0,0,1};
+float rojo[]={1,0,0},verde[]={0,1,0}, amarillo[]={1,1,0};
+float cyan[]={0,1,1}, rosa[]={1,0.5,0.5}, naranja[]={1,0.8,0}, gris[]={0.6,0.6,0.6};
+
+void inicio ()
+{
+    glMatrixMode(GL_PROJECTION);
+    int a=15;
+    gluOrtho2D(-a,a,-a,a);
+}
+
+void SectorCircular (float x, float y, float r,float theta1, float theta2,int modo, float *RGB)
+{
+    glColor3fv(RGB);
+    switch(modo)
+    {
+        case 1: glBegin(GL_LINE_LOOP);break;
+        case 2: glBegin(GL_POLYGON);break;
+
+    }
+        glVertex2f(x,y);
+        for (float T=theta1 ; T<theta2 ;T=T+0.01)
+        {
+            glVertex2f(r*cos(T)+x,r*sin(T)+y);
+        }
+
+    glEnd();
+}
+
+void circulo (float x, float y, float r, int patron, float *color, float p, float l )
+{
+    glColor3fv(color);
+    glPointSize(p);
+    glLineWidth(l);
+
+    switch(patron)
+    {
+    case 1:
+        glBegin(GL_POINTS);break;
+    case 2:
+        glBegin(GL_LINES);break;
+    case 3:
+        glBegin(GL_LINE_LOOP);break;
+
+    case 4:
+        glBegin(GL_POLYGON); break;
+    }
+        for (float Theta=0 ; Theta< 2*M_PI ; Theta = Theta + 0.1)
+        {
+            glVertex2f(r*cos(Theta)+x,r*sin(Theta)+y);
+        }
+        glEnd();
+}
+
+
+void display (void)
+{
+    glClearColor(0,0,0,0); //opcional:color de la venta (negro)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    SectorCircular(0,0,8,M_PI/2,3*M_PI/2,2,blanco);
+    circulo(0,-4,4,4,rojo,2,2);
+    SectorCircular(0,0,8,-M_PI/2,M_PI/2,2,rojo);
+    circulo(0,4,4,4,blanco,2,2);
+
+    circulo(0,4,1,4,rojo,2,2);
+    circulo(0,-4,1,4,blanco,2,2);
+
+    glutSwapBuffers();
+ }
+
+
+int main(int argc, char *argv[])
+{
+    glutInit(&argc, argv); //Inicializar la ventana
+
+    glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE|GLUT_DEPTH);//Especifica el tipo de modo de visualizacion al crear una ventana(Activa el buffer de colores de tipo RGB
+
+    glutInitWindowPosition(10,10);//Posicion de la ventana
+    glutInitWindowSize(600,600); //Tamaño de la ventana
+    glutCreateWindow("Pregunta1"); //Nombre que se le da a la ventana
+    glutDisplayFunc(display);
+
+
+    inicio();
+
+
+    glutMainLoop(); //Hace que aparezca la ventana
+    return EXIT_SUCCESS; //Puedes colocar tambien Return 0
+
+}

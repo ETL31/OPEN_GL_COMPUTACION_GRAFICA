@@ -1,0 +1,147 @@
+#include <windows.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+#include<cmath>
+#include <stdlib.h>
+#define M_PI 3.1415
+
+float blanco[]={1,1,1};
+float negro[]={0,0,0},azul[]={0,0,1};
+float rojo[]={1,0,0},verde[]={0,1,0}, amarillo[]={1,1,0};
+float cyan[]={0,1,1}, rosa[]={1,0.5,0.5}, naranja[]={1,0.8,0}, gris[]={0.6,0.6,0.6};
+
+void inicio ()
+{
+    glMatrixMode(GL_PROJECTION);
+    int a=20;
+    gluOrtho2D(-a,a,-a,a);
+}
+
+void hojas(float *r, float *theta, float theta1, int k, float n, float *color, float l, float p)
+{
+    glColor3fv(color);
+    switch (k)
+    {
+        case 1: {glPolygonMode(GL_FRONT_AND_BACK, GL_POINT); glPointSize(p); break;}
+        case 2: {glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); glLineWidth(l); break;}
+        case 3: {glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);break;}
+    }
+
+    glBegin(GL_POLYGON);
+
+    for (float i=0; i<n; i++)
+        {
+            glVertex2f(r[0]*cos(theta[0]+i*theta1),r[0]*sin(theta[0]+i*theta1));
+            glVertex2f(r[1]*cos(theta[1]+i*theta1),r[1]*sin(theta[1]+i*theta1));
+            glVertex2f(r[2]*cos(theta[2]+i*theta1),r[2]*sin(theta[2]+i*theta1));
+            glVertex2f(r[3]*cos(theta[3]+i*theta1),r[3]*sin(theta[3]+i*theta1));
+            glVertex2f(r[4]*cos(theta[4]+i*theta1),r[4]*sin(theta[4]+i*theta1));
+        }
+    glEnd();
+}
+
+void display(void)
+{
+    glClearColor(1,1,1,1);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+
+
+    float a3[]={9.17,18,18,18,18};
+    float a4[]={3*M_PI/2,3*M_PI/2,3*M_PI/2,3*M_PI/2,3*M_PI/2};
+    hojas(a3,a4,0,2,1,verde,3,3);
+
+
+    float y[]={7.5,9.41,8.49,6.28,7.5};
+    float z[]={53.11*M_PI/180,61.41*M_PI/180,77.31*M_PI/180,72.73*M_PI/180,53.11*M_PI/180};
+    hojas(y,z,M_PI/2,3,9,cyan,3,3);
+    hojas(y,z,M_PI/2,2,9,negro,3,3);
+
+    float a1[]={6,7.63,9.17,7.63,6};
+    float a2[]={M_PI/2,84.03*M_PI/180,M_PI/2,95.97*M_PI/180,M_PI/2};
+    hojas(a1,a2,M_PI/2,3,6,amarillo,3,3);
+    hojas(a1,a2,M_PI/2,2,5,negro,3,3);
+
+
+    float v[]={6.28,8.49,9.41,7.5,6.28};
+    float x[]={17.27*M_PI/180,12.69*M_PI/180,28.59*M_PI/180,36.89*M_PI/180,17.27*M_PI/180};
+    hojas(v,x,M_PI/2,3,9,cyan,3,3);
+    hojas(v,x,M_PI/2,2,9,negro,3,3);
+
+    float t[]={6.28,7.5,7.5,6.28,6.28};
+    float u[]={0.095*M_PI,0.205*M_PI,0.295*M_PI,0.404*M_PI,0.095*M_PI};
+    hojas(t,u,M_PI/2,3,5,gris,3,3);
+    hojas(t,u,M_PI/2,2,5,negro,3,3);
+
+    float p[]={4.87,6.28,5.56,4.5,4.87};
+    float q[]={M_PI/8,0.095*M_PI,M_PI/4,M_PI/4,M_PI/8};
+    hojas(p,q,M_PI/2,3,5,amarillo,3,3);
+    hojas(p,q,M_PI/2,2,5,negro,3,3);
+
+    float r[]={4.5,5.56,6.28,4.87,4.5};
+    float s[]={M_PI/4,M_PI/4,0.405*M_PI,0.375*M_PI,M_PI/4};
+    hojas(r,s,M_PI/2,3,5,cyan,3,3);
+    hojas(r,s,M_PI/2,2,5,negro,3,3);
+
+    float n[]={4.87,6.28,6.28,4.87,4.87};
+    float o[]={1.875*M_PI,1.904*M_PI,0.095*M_PI,M_PI/8,1.875*M_PI};
+    hojas(n,o,M_PI/2,3,5,rojo,3,3);
+    hojas(n,o,M_PI/2,2,5,negro,3,3);
+
+    float l[]={3.17,4.87,4.5,3.86,3.17};
+    float m[]={1.875*M_PI,1.875*M_PI,2*M_PI,2*M_PI,1.875*M_PI};
+    hojas(l,m,M_PI/4,3,8,amarillo,3,3);
+    hojas(l,m,M_PI/4,2,8,negro,3,3);
+
+
+    float j[]={3.17,3.86,4.5,4.87,3.17};
+    float k[]={M_PI/8,0,0,M_PI/8,M_PI/8};
+    hojas(j,k,M_PI/4,3,8,naranja,3,3);
+    hojas(j,k,M_PI/4,2,8,negro,3,3);
+
+    float h[]={2,3.17,3.86,3.17,2};
+    float i[]={M_PI/2,3*M_PI/8,M_PI/2,5*M_PI/8};
+    hojas(h,i,M_PI/2,3,5,rosa,3,3);
+    hojas(h,i,M_PI/2,2,5,negro,3,3);
+
+    float f[]={2,3.17,3.86,3.17,2};
+    float g[]={M_PI/4,M_PI/8,M_PI/4,3*M_PI/8,0};
+    hojas(f,g, M_PI/2,3,5,cyan,3,3);
+    hojas(f,g,M_PI/2,2,5,negro,3,3);
+
+    float d[]={2,3.17,2,2,0};
+    float e[]={0,M_PI/8,M_PI/4,0,0};
+    hojas(d,e,M_PI/4,3,9,verde,3,3);
+    hojas(d,e,M_PI/4,2,9,negro,3,3);
+
+    float b[]={0,2,2,0,0};
+    float c[]={0,0,M_PI/4,0,0};
+    hojas(b,c,M_PI/4,3,9,cyan,3,3);
+    hojas(b,c,M_PI/4,2,9,negro,3,3);
+
+    glutSwapBuffers();
+}
+
+
+int main(int argc, char *argv[])
+{
+    glutInit(&argc, argv); //Inicializar la ventana
+
+    glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE|GLUT_DEPTH);//Especifica el tipo de modo de visualizacion al crear una ventana(Activa el buffer de colores de tipo RGB
+
+    glutInitWindowPosition(10,10);//Posicion de la ventana
+    glutInitWindowSize(600,600); //Tamaño de la ventana
+    glutCreateWindow("MandalaPractica"); //Nombre que se le da a la ventana
+    glutDisplayFunc(display);
+
+
+    inicio();
+
+
+    glutMainLoop(); //Hace que aparezca la ventana
+    return EXIT_SUCCESS; //Puedes colocar tambien Return 0
+
+}

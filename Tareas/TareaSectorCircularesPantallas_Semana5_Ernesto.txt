@@ -1,0 +1,149 @@
+#include <windows.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+#include<cmath>
+#include <stdlib.h>
+#define M_PI 3.1415
+
+float blanco[]={1,1,1};
+float negro[]={0,0,0},azul[]={0,0,1};
+float rojo[]={1,0,0},verde[]={0,1,0}, amarillo[]={1,1,0};
+float cyan[]={0,1,1}, rosa[]={1,0.5,0.5}, naranja[]={1,0.8,0}, gris[]={0.6,0.6,0.6};
+
+void inicio ()
+{
+    glMatrixMode(GL_PROJECTION);
+    int a=20;
+    gluOrtho2D(-a,a,-a,a);
+}
+
+void SectorCircular (float x, float y, float r,float theta1, float theta2,int modo, float *RGB)
+{
+    glColor3fv(RGB);
+    switch(modo)
+    {
+        case 1: glBegin(GL_LINE_LOOP);break;
+        case 2: glBegin(GL_POLYGON);break;
+
+    }
+        glVertex2f(x,y);
+        for (float T=theta1 ; T<theta2 ;T=T+0.01)
+        {
+            glVertex2f(r*cos(T)+x,r*sin(T)+y);
+        }
+
+    glEnd();
+}
+
+
+void display1 (void)
+{
+    glClearColor(0,0,0,0); //opcional:color de la venta (negro)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    SectorCircular(-15,5,4,-M_PI/2,M_PI/2,1,naranja);
+
+    glutSwapBuffers();
+ }
+
+ void display2 (void)
+{
+    glClearColor(0,0,0,0); //opcional:color de la venta (negro)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    SectorCircular(-5,5,4,M_PI/2,2*M_PI,1,cyan);
+
+    glutSwapBuffers();
+ }
+
+ void display3 (void)
+{
+    glClearColor(0,0,0,0); //opcional:color de la venta (negro)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    SectorCircular(5,5,4,M_PI,3*M_PI/2,1,rosa);
+
+    glutSwapBuffers();
+ }
+
+ void display4 (void)
+{
+    glClearColor(0,0,0,0); //opcional:color de la venta (negro)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    SectorCircular(-15,-10,4,-M_PI/2,M_PI/2,2,rojo);
+
+    glutSwapBuffers();
+ }
+
+ void display5 (void)
+{
+    glClearColor(0,0,0,0); //opcional:color de la venta (negro)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    SectorCircular(-5,-10,4,M_PI/2,2*M_PI,2,rosa);
+
+    glutSwapBuffers();
+ }
+
+ void display6 (void)
+{
+    glClearColor(0,0,0,0); //opcional:color de la venta (negro)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+   SectorCircular(5,-10,4,M_PI,3*M_PI/2,2,blanco);
+
+   glutSwapBuffers();
+ }
+
+
+int main(int argc, char *argv[])
+{
+    glutInit(&argc, argv); //Inicializar la ventana
+
+    glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE|GLUT_DEPTH);//Especifica el tipo de modo de visualizacion al crear una ventana(Activa el buffer de colores de tipo RGB
+
+    glutInitWindowPosition(100,10);//Posicion de la ventana
+    glutInitWindowSize(300,300); //Tamaño de la ventana
+    glutCreateWindow("Pantalla 1"); //Nombre que se le da a la ventana
+    glutDisplayFunc(display1);
+    inicio();
+
+    glutInitWindowPosition(500,410);//Posicion de la ventana
+    glutInitWindowSize(300,300); //Tamaño de la ventana
+    glutCreateWindow("Pantalla 2"); //Nombre que se le da a la ventana
+    glutDisplayFunc(display2);
+    inicio();
+
+    glutInitWindowPosition(900,10);//Posicion de la ventana
+    glutInitWindowSize(300,300); //Tamaño de la ventana
+    glutCreateWindow("Pantalla 3"); //Nombre que se le da a la ventana
+    glutDisplayFunc(display3);
+    inicio();
+
+    glutInitWindowPosition(100,410);//Posicion de la ventana
+    glutInitWindowSize(300,300); //Tamaño de la ventana
+    glutCreateWindow("Pantalla 4"); //Nombre que se le da a la ventana
+    glutDisplayFunc(display4);
+    inicio();
+
+    glutInitWindowPosition(500,10);//Posicion de la ventana
+    glutInitWindowSize(300,300); //Tamaño de la ventana
+    glutCreateWindow("Pantalla 5"); //Nombre que se le da a la ventana
+    glutDisplayFunc(display5);
+    inicio();
+
+    glutInitWindowPosition(900,410);//Posicion de la ventana
+    glutInitWindowSize(300,300); //Tamaño de la ventana
+    glutCreateWindow("Pantalla 6"); //Nombre que se le da a la ventana
+    glutDisplayFunc(display6);
+    inicio();
+
+
+    glutMainLoop(); //Hace que aparezca la ventana
+    return EXIT_SUCCESS; //Puedes colocar tambien Return 0
+
+}

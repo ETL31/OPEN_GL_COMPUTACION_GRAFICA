@@ -1,0 +1,139 @@
+#include <windows.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+#include<cmath>
+#include <stdlib.h>
+#define M_PI 3.1415
+
+float blanco[]={1,1,1};
+float negro[]={0,0,0},azul[]={0,0,1};
+float rojo[]={1,0,0},verde[]={0,1,0}, amarillo[]={1,1,0};
+float cyan[]={0,1,1}, rosa[]={1,0.5,0.5}, naranja[]={1,0.8,0}, gris[]={0.6,0.6,0.6};
+
+void inicio ()
+{
+    glMatrixMode(GL_PROJECTION);
+    int a=15;
+    gluOrtho2D(-a,a,-a,a);
+}
+
+void circulo (float x, float y, float r, int patron, float *color, float p, float l )
+{
+    glColor3fv(color);
+    glPointSize(p);
+    glLineWidth(l);
+
+    switch(patron)
+    {
+    case 1:
+        glBegin(GL_POINTS);break;
+    case 2:
+        glBegin(GL_LINES);break;
+    case 3:
+        glBegin(GL_LINE_LOOP);break;
+
+    case 4:
+        glBegin(GL_POLYGON); break;
+    }
+        for (float Theta=0 ; Theta< 2*M_PI ; Theta = Theta + 0.1)
+        {
+            glVertex2f(r*cos(Theta)+x,r*sin(Theta)+y);
+        }
+        glEnd();
+}
+
+void petalos(float *XY, float R, float *C, int M, int N,float o)
+{
+    glColor3fv(C);
+
+    switch(M)
+    {
+        case 1: glPolygonMode(GL_FRONT_AND_BACK,GL_POINT);
+                glPointSize(3);
+                break;
+        case 2: glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+                glLineWidth(3);
+                break;
+        case 3: glPolygonMode(GL_FRONT_AND_BACK,GL_FILL); break;
+
+    }
+
+    glBegin(GL_POLYGON);
+
+    for(float T=0; T<2*M_PI; T=T+o)
+    {
+        glVertex2f(XY[0]+R*sin(N*T)*cos(T),XY[1]+R*sin(N*T)*sin(T));
+    }
+    glEnd();
+}
+
+void tallo (float x, float y, float lado1, float lado2, float *color)
+{
+
+    glBegin(GL_POLYGON);
+    glColor3fv(color);
+    glVertex2f(x,y);
+    glVertex2f(x+lado1,y);
+    glVertex2f(x+lado1,y-lado2);
+    glVertex2f(x,y-lado2);
+
+    glEnd();
+}
+
+void hoja (float x,float y, float r, float *color)
+{
+    glBegin(GL_POLYGON);
+    glVertex2f(x,y);
+    glColor3fv(color);
+    for (float t=0; t<2*M_PI;t=t+0.001)
+    {
+        glVertex2f(r*sqrt(cos(2*t))*cos(t)+x,r*sqrt(cos(2*t))*sin(t)+y);
+
+    }
+    glEnd();
+}
+
+
+
+void display (void)
+{
+    glClearColor(0,0,0,0); //opcional:color de la venta (negro)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    float a[]={0,4};
+
+    tallo(-0.2,4,0.4,10,verde);
+    hoja(0,-4,3,verde);
+    petalos(a,6,rojo,3,6,0.01);
+    circulo(0,4,1,4,amarillo,2,1);
+
+
+
+
+
+    glutSwapBuffers();
+ }
+
+
+int main(int argc, char *argv[])
+{
+    glutInit(&argc, argv); //Inicializar la ventana
+
+    glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE|GLUT_DEPTH);//Especifica el tipo de modo de visualizacion al crear una ventana(Activa el buffer de colores de tipo RGB
+
+    glutInitWindowPosition(10,10);//Posicion de la ventana
+    glutInitWindowSize(600,600); //Tamaño de la ventana
+    glutCreateWindow("Pregunta1"); //Nombre que se le da a la ventana
+    glutDisplayFunc(display);
+
+
+    inicio();
+
+
+    glutMainLoop(); //Hace que aparezca la ventana
+    return EXIT_SUCCESS; //Puedes colocar tambien Return 0
+
+}

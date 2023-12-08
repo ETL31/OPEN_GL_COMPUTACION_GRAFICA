@@ -1,0 +1,83 @@
+#include <windows.h>
+#ifdef _APPLE_
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+#include<cmath>
+#include <stdlib.h>
+#define M_PI 3.1415
+
+float blanco[]={1,1,1};
+float negro[]={0,0,0},azul[]={0,0,1};
+float rojo[]={1,0,0},verde[]={0,1,0}, amarillo[]={1,1,0};
+float cyan[]={0,1,1}, rosa[]={1,0.5,0.5}, naranja[]={1,0.8,0}, gris[]={0.6,0.6,0.6};
+
+void inicio ()
+{
+    glMatrixMode(GL_PROJECTION);
+    int a=6;
+    gluOrtho2D(-a,a,-a,a);
+}
+
+void lineas(float a, float b, float c, float d, float e, float f, float g, float  h, int patron1, float s,float *rgb)
+{
+    glColor3fv(rgb);
+    glLineWidth(s);
+
+    switch(patron1)
+    {
+        case 1: glBegin(GL_POINTS); break;
+        case 2: glBegin(GL_LINES); break;
+        case 3: glBegin(GL_LINE_STRIP); break;
+        case 4: glBegin(GL_POLYGON); break;
+    }
+
+    glVertex2f(a,b);
+    glVertex2f(c,d);
+    glVertex2f(e,f);
+    glVertex2f(g,h);
+
+    glEnd();
+}
+
+void display (void)
+{
+    glClearColor(1,1,1,0); //opcional:color de la venta (negro)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    lineas(-1.56,4,-0.77,4,-0.25,4.52,-0.24,0.63,3,3,negro);
+    lineas(-0.24,0.63,0,0.38,0.33,0.7,0.33,4.54,3,3,negro);
+    lineas(0.33,4.54,0.87,4,1.65,4,0.04,5.61,3,3,negro);
+    lineas(0.04,5.61,-1.56,4,-4,4,-4,0.24,3,3,negro);
+    lineas(-4,0.24,-3.37,0.23,-3.37,2.97,-2.99,2.57,3,3,negro);
+    lineas(-2.99,2.57,-2.58,2.98,-2.97,3.39,-0.24,3.39,3,3,negro);
+    lineas(-0.24,4,-1.56,4,-1.56,4,-1.56,4,3,3,negro);
+    
+
+
+
+
+
+    glutSwapBuffers();
+ }
+
+int main(int argc, char *argv[])
+{
+    glutInit(&argc, argv); //Inicializar la ventana
+
+    glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE|GLUT_DEPTH);//Especifica el tipo de modo de visualizacion al crear una ventana(Activa el buffer de colores de tipo RGB
+
+    glutInitWindowPosition(10,10);//Posicion de la ventana
+    glutInitWindowSize(600,600); //Tamaño de la ventana
+    glutCreateWindow("Pregunta1"); //Nombre que se le da a la ventana
+    glutDisplayFunc(display);
+
+
+    inicio();
+
+
+    glutMainLoop(); //Hace que aparezca la ventana
+    return EXIT_SUCCESS; //Puedes colocar tambien Return 0
+
+}

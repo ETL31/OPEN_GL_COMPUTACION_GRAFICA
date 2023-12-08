@@ -1,0 +1,144 @@
+#include <windows.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+#include<cmath>
+#include <stdlib.h>
+#define M_PI 3.1415
+
+float blanco[]={1,1,1};
+float negro[]={0,0,0},azul[]={0,0,1};
+float rojo[]={1,0,0},verde[]={0,1,0}, amarillo[]={1,1,0};
+float cyan[]={0,1,1}, rosa[]={1,0.5,0.5}, naranja[]={1,0.8,0}, gris[]={0.6,0.6,0.6};
+
+void inicio ()
+{
+    glMatrixMode(GL_PROJECTION);
+    int a=15;
+    gluOrtho2D(-a,a,-a,a);
+}
+
+
+void sectorcircular1 (float *XY, float r, int m, float theta1, float theta2, float n, float x1, float y1, float *color, float l,float p)
+{
+    glColor3fv(color);
+
+    for(float i=0;i<n;i++)
+    {
+    glBegin(GL_LINE_STRIP);
+
+        for (float T=theta1 ; T<theta2 ;T=T+0.01)
+        {
+            switch (m)
+            {
+                case 1: glVertex2f(r*cos(T)+XY[0],r*sin(T)+XY[1]+2*r*i); break;
+                case 2: glVertex2f(r*cos(T)+XY[0]+2*r*i,r*sin(T)+XY[1]); break;
+                case 3: glVertex2f(r*cos(T)+XY[0],r*sin(T)+XY[1]);break;
+            }
+        }
+        glEnd();
+
+        XY[0]=XY[0]+x1;
+        XY[1]=XY[1]+y1;
+
+       }
+}
+
+
+void circulos (float *XY, float r, int k, int m, float theta1, float theta2, float n, float *color, float l,float p)
+{
+    glColor3fv(color);
+
+    for(float i=0;i<n;i++)
+    {
+        switch (k)
+            {
+                case 1: {glPolygonMode(GL_FRONT_AND_BACK, GL_POINT); glPointSize(p); break;}
+                case 2: {glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); glLineWidth(l); break;}
+                case 3: {glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);break;}
+            }
+
+    glBegin(GL_POLYGON);
+
+        for (float T=theta1 ; T<theta2 ;T=T+0.01)
+        {
+            switch (m)
+            {
+                case 1: glVertex2f(r*cos(T)+XY[0],r*sin(T)+XY[1]+2*r*i); break;
+                case 2: glVertex2f(r*cos(T)+XY[0]+2*r*i,r*sin(T)+XY[1]); break;
+                case 3: glVertex2f(r*cos(T)+XY[0],r*sin(T)+XY[1]);break;
+            }
+        }
+        glEnd();
+
+        XY[1]=XY[1]+r;
+    }
+}
+
+void display(void)
+{
+    glClearColor(1,1,1,1);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    float o[]={0,0}; float a[]={0,-8}; float b[]={-3.46,-6}; float c[]={3.46,-6};
+    float d[]={-6.93,-4};float e[]={6.93,-4}; float f[]={-10.39,-2}; float g[]={10.39,-2};
+    float h[]={-3.46,-10}; float i[]={3.46,-10}; float j[]={-3.46,10}; float k[]={3.46,10};
+    float l[]={-10.39,-6}; float m[]={-10.39,6}; float n[]={10.39,-6}; float p[]={10.39,6};
+    float q[]={0,12}; float r[]={0,-12}; float s[]={-3.46,-14}; float t[]={3.46,-14};
+    float u[]={-3.46,14}; float v[]={3.46,14}; float w[]={-13.86,-4}; float x[]={13.86,-4};
+
+
+    circulos(o,12,2,3,0,2*M_PI,1,negro,3,3);
+    circulos(a,4,2,3,0,2*M_PI,5,negro,3,3);
+    circulos(b,4,2,3,0,2*M_PI,4,negro,3,3);
+    circulos(c,4,2,3,0,2*M_PI,4,negro,3,3);
+    circulos(d,4,2,3,0,2*M_PI,3,negro,3,3);
+    circulos(e,4,2,3,0,2*M_PI,3,negro,3,3);
+
+    sectorcircular1(f,4,3,3*M_PI/2,5*M_PI/2,2,0,4,negro,3,3);
+    sectorcircular1(g,4,3,M_PI/2,3*M_PI/2,2,0,4,negro,3,3);
+    sectorcircular1(h,4,3,11*M_PI/6,17*M_PI/6,2,-3.47,2,negro,3,3);
+    sectorcircular1(i,4,3,M_PI/6,7*M_PI/6,2,3.47,2,negro,3,3);
+    sectorcircular1(j,4,3,7*M_PI/6,13*M_PI/6,2,-3.47,-2,negro,3,3);
+    sectorcircular1(k,4,3,5*M_PI/6,11*M_PI/6,2,3.47,-2,negro,3,3);
+
+    sectorcircular1(l,4,3,11*M_PI/6,5*M_PI/2,1,0,0,negro,3,3);
+    sectorcircular1(m,4,3,3*M_PI/2,13*M_PI/6,1,0,0,negro,3,3);
+    sectorcircular1(n,4,3,M_PI/2,7*M_PI/6,1,0,0,negro,3,3);
+    sectorcircular1(p,4,3,5*M_PI/6,3*M_PI/2,1,0,0,negro,3,3);
+    sectorcircular1(q,4,3,7*M_PI/6,11*M_PI/6,1,0,0,negro,3,3);
+    sectorcircular1(r,4,3,M_PI/6,5*M_PI/6,1,0,0,negro,3,3);
+
+    sectorcircular1(s,4,3,M_PI/6,M_PI/2,3,-3.47,2,negro,3,3);
+    sectorcircular1(t,4,3,M_PI/2,5*M_PI/6,3,3.47,2,negro,3,3);
+    sectorcircular1(u,4,3,3*M_PI/2,11*M_PI/6,3,-3.47,-2,negro,3,3);
+    sectorcircular1(v,4,3,7*M_PI/6,3*M_PI/2,3,3.47,-2,negro,3,3);
+    sectorcircular1(w,4,3,11*M_PI/6,13*M_PI/6,3,0,4,negro,3,3);
+    sectorcircular1(x,4,3,5*M_PI/6,7*M_PI/6,3,0,4,negro,3,3);
+
+
+    glutSwapBuffers();
+}
+
+
+int main(int argc, char *argv[])
+{
+    glutInit(&argc, argv); //Inicializar la ventana
+
+    glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE|GLUT_DEPTH);//Especifica el tipo de modo de visualizacion al crear una ventana(Activa el buffer de colores de tipo RGB
+
+    glutInitWindowPosition(10,10);//Posicion de la ventana
+    glutInitWindowSize(600,600); //Tamaño de la ventana
+    glutCreateWindow("EstrellaRara"); //Nombre que se le da a la ventana
+    glutDisplayFunc(display);
+
+
+    inicio();
+
+
+    glutMainLoop(); //Hace que aparezca la ventana
+    return EXIT_SUCCESS; //Puedes colocar tambien Return 0
+
+}

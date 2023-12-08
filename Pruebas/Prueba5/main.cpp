@@ -1,0 +1,278 @@
+#include <windows.h>
+#ifdef _APPLE_
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+#include <iostream>
+#include <stdlib.h>
+
+float blanco[]={1,1,1};
+float negro[]={0,0,0},azul[]={0,0,1};
+float rojo[]={1,0,0},verde[]={0,1,0}, amarillo[]={1,1,0};
+float cyan[]={0,1,1}, rosa[]={1,0.5,0.5}, naranja[]={1,0.8,0}, gris[]={0.6,0.6,0.6};
+
+void inicio ()
+{
+    glMatrixMode(GL_PROJECTION);
+    int a=9;
+    gluOrtho2D(-a,a,-a,a);
+}
+
+void poligono(float x, float y, float a, float b, float c, float d, float e, float f, float g, float h, float j, float k, float *color, float s)
+{
+    glColor3fv(color);
+    glLineWidth(3);
+    glBegin(GL_LINE_STRIP);
+    glVertex2f(x,y);
+    glVertex2f(a,b);
+    glVertex2f(c,d);
+    glVertex2f(e,f);
+    glVertex2f(g,h);
+    glVertex2f(j,k);
+
+    glEnd();
+
+}
+
+void tallo(float x, float y, float a, float b, float c, float d, float e, float f, float g, float h, float j, float k, float *color, float s)
+{
+    glColor3fv(color);
+    glLineWidth(3);
+    glBegin(GL_LINES);
+    glVertex2f(x,y);
+    glVertex2f(a,b);
+    glVertex2f(c,d);
+    glVertex2f(e,f);
+    glVertex2f(g,h);
+    glVertex2f(j,k);
+
+    glEnd();
+}
+
+
+void display (void)
+{
+    glClearColor(1,1,1,1); //opcional:color de la venta (negro)
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    poligono(0.02,1.33,-0.17,1.14,-0.17,1.14,-1.27,1.06,-1.27,1.06,-2.0,1.0,negro,3);
+    poligono(-2.0,1.0,-0.89,2.07,-0.89,2.07,-0.65,1.93,-0.65,1.93,-0.92,1.83,negro,3);
+    poligono(-0.92,1.83,0.02,1.33,0.02,1.33,0.02,1.33,0.02,1.33,0.02,1.33,negro,3);
+
+    poligono(0.02,1.33,-0.74,0.39,-0.74,0.39,-1.27,1.06,-1.27,1.06,-0.17,1.14,negro,3);
+    poligono(-0.17,1.14,0.02,1.33,0.02,1.33,0.02,1.33,0.02,1.33,0.02,1.33,negro,3);
+
+    poligono(-0.09,0.58,-0.52,0.42,-0.52,0.42,-0.74,0.39,-0.74,0.39,0.02,1.33,negro,3);
+    poligono(0.02,1.33,-0.09,0.58,-0.09,0.58,-0.09,0.58,-0.09,0.58,-0.09,0.58,negro,3);
+
+    poligono(3.23,2.51,1.58,2.12,1.58,2.12,1.5,2.0,1.5,2.0,0.02,1.33,negro,3);
+    poligono(0.02,1.33,-0.09,0.58,-0.09,0.58,0.08,0.65,0.08,0.65,0.4,0.83,negro,3);
+    poligono(0.4,0.83,0.69,1.01,0.69,1.01,1.09,1.25,1.09,1.25,2.53,2.08,negro,3);
+    poligono(2.53,2.08,3.23,2.51,3.23,2.51,3.23,2.51,3.23,2.51,3.23,2.51,negro,3);
+
+    poligono(1.09,1.25,1.27,1.06,1.27,1.06,1.41,1.07,1.41,1.07,1.5,1.0,negro,3);
+    poligono(1.5,1.0,2.31,1.54,2.31,1.54,2.53,2.08,2.53,2.08,1.09,1.25,negro,3);
+
+
+    poligono(0.89,0.75,0.69,1.01,0.69,1.01,1.09,1.25,1.09,1.25,1.27,1.06,negro,3);
+    poligono(1.27,1.06,1.57,0.77,1.57,0.77,0.89,0.75,0.89,0.75,0.89,0.75,negro,3);
+
+    poligono(0.4,0.83,0.61,0.55,0.61,0.55,1.32,0.21,1.32,0.21,0.89,0.75,negro,3);
+    poligono(0.89,0.75,0.69,1.01,0.69,1.01,0.4,0.83,0.4,0.83,0.4,0.83,negro,3);
+
+    poligono(0.08,0.65,-0.09,0.58,-0.09,0.58,-0.52,0.42,-0.52,0.42,-0.85,-0.26,negro,3);
+    poligono(-0.85,-0.26,0.0,0.0,0.0,0.0,0.08,0.65,0.08,0.65,0.08,0.65,negro,3);
+
+    poligono(0.0,0.0,0.0,-0.12,0.0,-0.12,0.61,-0.85,0.61,-0.85,0.86,0.2,negro,3);
+    poligono(0.86,0.2,0.61,0.55,0.61,0.55,0.4,0.83,0.4,0.83,0.08,0.65,negro,3);
+    poligono(0.08,0.65,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,negro,3);
+
+    glColor3f(0,0,0);
+    glLineWidth(3);
+    glBegin(GL_LINE_LOOP); //Une los puntos de manera consecutivo
+    glVertex2f(0.02,1.33);
+    glVertex2f(-0.92,1.93);
+    glVertex2f(-0.65,1.93);
+    glVertex2f(0.19,2.18);
+    glVertex2f(1.01,2.39);
+    glVertex2f(1.41,2.48);
+    glVertex2f(2.47,3.81);
+    glVertex2f(1.58,2.12);
+
+    glEnd();
+
+
+    glColor3f(0,0,0);
+    glLineWidth(3);
+    glBegin(GL_LINE_LOOP); //Une los puntos de manera consecutivo
+    glVertex2f(2.27,5.08);
+    glVertex2f(2.88,5.16);
+    glVertex2f(3.23,2.51);
+    glVertex2f(1.58,2.12);
+    glVertex2f(2.47,3.81);
+
+    glEnd();
+
+
+    glColor3f(0,0,0);
+    glLineWidth(3);
+    glBegin(GL_LINE_LOOP); //Une los puntos de manera consecutivo
+    glVertex2f(2.27,5.08);
+    glVertex2f(2.47,3.81);
+    glVertex2f(1.41,2.48);
+    glVertex2f(1.01,2.39);
+    glVertex2f(1.88,3.41);
+    glVertex2f(2.13,5.01);
+
+    glEnd();
+
+    glColor3f(0,0,0);
+    glLineWidth(3);
+    glBegin(GL_LINE_LOOP); //Une los puntos de manera consecutivo
+    glVertex2f(0.75,6.12);
+    glVertex2f(2.09,5.91);
+    glVertex2f(2.27,5.08);
+    glVertex2f(2.13,5.01);
+    glVertex2f(0.97,5.19);
+    glVertex2f(0.84,5.06);
+    glEnd();
+
+    glColor3f(0,0,0);
+    glLineWidth(3);
+    glBegin(GL_LINE_LOOP); //Une los puntos de manera consecutivo
+    glVertex2f(-0.32,5.37);
+    glVertex2f(0.63,6.18);
+    glVertex2f(0.75,6.12);
+    glVertex2f(0.84,5.06);
+    glVertex2f(0.64,4.88);
+    glVertex2f(0.64,5.34);
+
+    glEnd();
+
+    glColor3f(0,0,0);
+    glLineWidth(3);
+    glBegin(GL_LINE_LOOP); //Une los puntos de manera consecutivo
+    glVertex2f(-1.46,5.45);
+    glVertex2f(-1,5.5);
+    glVertex2f(-0.87,5.36);
+    glVertex2f(-0.32,5.37);
+    glVertex2f(0.63,6.18);
+    glVertex2f(-0.54,6.16);
+    glEnd();
+
+
+    glColor3f(0,0,0);
+    glLineWidth(3);
+    glBegin(GL_LINE_LOOP); //Une los puntos de manera consecutivo
+    glVertex2f(-1.36,4.42);
+    glVertex2f(-1.96,5.42);
+    glVertex2f(-1.46,5.45);
+    glVertex2f(-1.0,5.5);
+    glVertex2f(-0.87,5.36);
+    glVertex2f(-1.01,5.3);
+
+    glEnd();
+
+
+    glColor3f(0,0,0);
+    glLineWidth(3);
+    glBegin(GL_LINE_LOOP); //Une los puntos de manera consecutivo
+    glVertex2f(-2.71,2.87);
+    glVertex2f(-3.05,3.42);
+    glVertex2f(-2.39,4.82);
+    glVertex2f(-2.18,4.79);
+    glVertex2f(-2.44,3.76);
+
+    glEnd();
+
+    glColor3f(0,0,0);
+    glLineWidth(3);
+    glBegin(GL_LINE_LOOP); //Une los puntos de manera consecutivo
+    glVertex2f(-1.38,2.64);
+    glVertex2f(-2.44,3.76);
+    glVertex2f(-2.18,4.79);
+    glVertex2f(-1.96,5.42);
+    glVertex2f(-1.36,4.42);
+    glVertex2f(-1.59,3.8);
+
+    glEnd();
+
+    glColor3f(0,0,0);
+    glLineWidth(3);
+    glBegin(GL_LINE_LOOP); //Une los puntos de manera consecutivo
+    glVertex2f(-1.32,2.4);
+    glVertex2f(-2.89,2.14);
+    glVertex2f(-2.71,2.87);
+    glVertex2f(-2.44,3.76);
+    glVertex2f(-1.38,2.64);
+    glEnd();
+
+    glColor3f(0,0,0);
+    glLineWidth(3);
+    glBegin(GL_LINE_LOOP); //Une los puntos de manera consecutivo
+    glVertex2f(-0.89,2.07);
+    glVertex2f(-2.0,1.0);
+    glVertex2f(-2.89,2.14);
+    glVertex2f(-1.32,2.4);
+
+    glEnd();
+
+
+    //Tallo(Func. Tallo) y Hojas(Func. poligono)
+
+    poligono(-2.08,-1.77,-3.3,-2.11,-3.3,-2.11,-3.68,-3.0,-3.68,-3.0,-2.82,-3.0,negro,3);
+    poligono(-2.82,-3.0,-2.08,-1.77,-2.08,-1.77,-2.08,-1.77,-2.08,-1.77,-2.08,-1.77,negro,3);
+
+    poligono(0.26,-1.26,0.49,-1.48,0.49,-1.48,1.25,-1.93,1.25,-1.93,0.74,-1.0,negro,3);
+    poligono(0.74,-1.0,0.6,-1.06,0.6,-1.06,0.26,-1.26,0.26,-1.26,0.26,-1.26,negro,3);
+
+    poligono(-0.09,-1.5,0.27,-1.66,0.27,-1.66,0.49,-1.48,0.49,-1.48,0.26,-1.26,negro,3);
+    poligono(0.26,-1.26,0.6,-1.06,0.6,-1.06,0.23,-0.76,0.23,-0.76,0.01,-0.87,negro, 3);
+    poligono(0.01,-0.87,0.0,-1.2,0.0,-1.2,-0.09,-1.5,-0.09,-1.5,-0.09,-1.5,negro,3);
+
+    poligono(-0.02,-4.79,0.71,-4.21,0.71,-4.21,1.16,-3.07,1.16,-3.07,0.05,-3.29,negro,3);
+    poligono(0.05,-3.29,-0.19,-4.4,-0.19,-4.4,-0.02,-4.79,-0.02,-4.79,-0.02,-4.79,negro,3);
+
+    poligono(-0.02,-4.79,0.39,-4.93,0.39,-4.93,1.62,-5.44,1.62,-5.44,1.26,-4.18,negro,3);
+    poligono(1.26,-4.18,0.71,-4.21,0.71,-4.21,-0.02,-4.79,-0.02,-4.79,-0.02,-4.79,negro,3);
+
+    poligono(0.11,-5.15,0.28,-5.43,0.28,-5.43,0.39,-4.93,0.39,-4.93,-0.02,-4.79,negro,3);
+    poligono(-0.02,-4.79,0.11,-5.15,0.11,-5.15,0.11,-5.15,0.11,-5.15,0.11,-5.15,negro,3);
+
+    poligono(-0.09,-1.5,-0.02,-2.11,-0.02,-2.11,0.1,-1.78,0.1,-1.78,-0.09,-1.5,negro,3);
+
+    poligono(-1.12,-2.41,-0.9,-1.52,-0.9,-1.52,-1.54,-0.38,-1.54,-0.38,-2.12,-1.41,negro,3);
+    poligono(-2.12,-1.41,-1.12,-2.41,-1.12,-2.41,-1.12,-2.41,-1.12,-2.41,-1.12,-2.41,negro,3);
+
+    poligono(-1.12,-2.41,-2.12,-2.87,-2.12,-2.87,-2.03,-4.41,-2.03,-4.41,-1.24,-3.39,negro,3);
+    poligono(-1.24,-3.39,-1.12,-2.41,-1.12,-2.41,-1.12,-2.41,-1.12,-2.41,-1.12,-2.41,negro,3);
+
+    tallo(0.0,0.0,0.01,-0.87,0.01,-0.87,-0.09,-1.5,-0.09,-1.5,-0.56,-2.62,negro,3);
+    tallo(-0.56,-2.62,-0.4,-3.77,-0.4,-3.77,-0.19,-4.4,-0.19,-4.4,-0.02,-4.79,negro,3);
+    tallo(-0.02,-4.79,0.11,-5.15,0.11,-5.15,-0.35,-6.91,-0.35,-6.91,-0.31,-8.01,negro,3);
+    tallo(-0.31,-8.01,-0.52,-6.72,-0.52,-6.72,-0.21,-5.06,-0.21,-5.06,-0.79,-3.2,negro,3);
+    tallo(-1.12,-2.41,-0.86,-2.58,-0.86,-2.58,-0.2,-0.87,-0.2,-0.87,-0.19,-0.06,negro,3);
+    tallo(-0.79,-3.2,-1.12,-2.41,-0.19,-0.06,0.0,0.0,0.0,0.0,0.0,0.0,negro,3);
+
+
+    glutSwapBuffers();
+
+}
+
+int main(int argc, char *argv[])
+{
+    glutInit(&argc, argv); //Inicializar la ventana
+    glutInitWindowPosition(0,0);//Posicion de la ventana
+    glutInitWindowSize(600,600); //Tamaño de la ventana
+    glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE|GLUT_DEPTH);//Especifica el tipo de modo de visualizacion al crear una ventana(Activa el buffer de colores de tipo RGB
+
+    glutCreateWindow("Rosa"); //Nombre que se le da a la ventana
+    glutDisplayFunc(display);
+    inicio();
+
+
+    glutMainLoop(); //Hace que aparezca la ventana
+    return EXIT_SUCCESS; //Puedes colocar tambien Return 0
+
+}

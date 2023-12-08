@@ -1,0 +1,128 @@
+#include <windows.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+#include<cmath>
+#include <stdlib.h>
+#define M_PI 3.1415
+
+float blanco[]={1,1,1};
+float negro[]={0,0,0},azul[]={0,0,1};
+float rojo[]={1,0,0},verde[]={0,1,0}, amarillo[]={1,1,0};
+float cyan[]={0,1,1}, rosa[]={1,0.5,0.5}, naranja[]={1,0.8,0}, gris[]={0.6,0.6,0.6};
+
+void inicio ()
+{
+    glMatrixMode(GL_PROJECTION);
+    int a=5;
+    gluOrtho2D(-a,a,-a,a);
+}
+
+/*void circunferencia(float r, float x1, float y1, int patron1, float s,float *rgb)
+{
+    glColor3fv(rgb);
+    glLineWidth(s);
+
+    switch(patron1)
+    {
+        case 1: glBegin(GL_POINTS); break;
+        case 2: glBegin(GL_LINES); break;
+        case 3: glBegin(GL_LINE_LOOP); break;
+        case 4: glBegin(GL_POLYGON); break;
+    }
+
+    for(float theta=0; theta<2*M_PI; theta=theta+0.1)
+    {
+        glVertex2f(r*cos(theta)+x1,r*sin(theta)+y1);
+    }
+    glEnd();
+}
+*/
+
+void display (void)
+{
+    glClearColor(0,0,0,0); //opcional:color de la venta (negro)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    /*Cardioide*/
+
+    glBegin(GL_POLYGON);
+    glVertex2f(-2,2);
+    for (float t=0; t<2*M_PI;t=t+0.0001)
+    {
+        glColor3f(1,1,1);
+        glVertex2f(0.5*(1-sin(t))*cos(t)-2,0.5*(1-sin(t))*sin(t)+2);
+
+    }
+    glEnd();
+
+    /*Caracol con rizo*/
+  glBegin(GL_POINTS);
+    glVertex2f(3,1);
+    for (float t=0; t<2*M_PI;t=t+0.0001)
+    {
+        glColor3f(1,1,1);
+        glVertex2f(0.5*(1+2*sin(t))*cos(t)+3,0.5*(1+2*sin(t))*sin(t)+1);
+
+    }
+    glEnd();
+
+    /*Rosa 4petalos*/
+    glBegin(GL_POINTS);
+    glVertex2f(0,0);
+    for (float t=0; t<2*M_PI;t=t+0.0001)
+    {
+        glColor3f(1,1,1);
+        glVertex2f(sin(2*t)*cos(t),sin(2*t)*sin(t));
+
+    }
+    glEnd();
+
+    /*Rosa 3petalos*/
+    glBegin(GL_POINTS);
+    glVertex2f(-2,-2);
+    for (float t=0; t<2*M_PI;t=t+0.0001)
+    {
+        glColor3f(1,1,1);
+        glVertex2f(sin(3*t)*cos(t)-2,sin(3*t)*sin(t)-2);
+
+    }
+    glEnd();
+
+    /*Lemniscatas*/
+    glBegin(GL_POLYGON);
+    glVertex2f(2,-2);
+    for (float t=0; t<2*M_PI;t=t+0.0001)
+    {
+        glColor3f(1,1,1);
+        glVertex2f(0.9*sqrt(cos(2*t))*cos(t)+2,sqrt(cos(2*t))*sin(t)-2);
+
+    }
+    glEnd();
+
+
+    glutSwapBuffers();
+ }
+
+
+int main(int argc, char *argv[])
+{
+    glutInit(&argc, argv); //Inicializar la ventana
+
+    glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE|GLUT_DEPTH);//Especifica el tipo de modo de visualizacion al crear una ventana(Activa el buffer de colores de tipo RGB
+
+    glutInitWindowPosition(10,10);//Posicion de la ventana
+    glutInitWindowSize(600,600); //Tamaño de la ventana
+    glutCreateWindow("Pregunta1"); //Nombre que se le da a la ventana
+    glutDisplayFunc(display);
+
+
+    inicio();
+
+
+    glutMainLoop(); //Hace que aparezca la ventana
+    return EXIT_SUCCESS; //Puedes colocar tambien Return 0
+
+}

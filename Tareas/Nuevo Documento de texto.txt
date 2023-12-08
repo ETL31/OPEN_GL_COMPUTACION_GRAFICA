@@ -1,0 +1,372 @@
+#include<windows.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+#include <stdlib.h>
+#include <math.h>
+#include <stdio.h>
+#include <ctime>
+#define PI 3.141592f
+
+bool click;
+int raton[2];
+char texto0[100], texto1[100], texto2[100];
+
+class Ficha {
+public:
+  bool existe, color;
+
+  void Pintar(int x, int y) {
+      if (existe) {
+        glPushMatrix();
+        glTranslatef( (600/8)*x + (600/16), 200 + (600/8)*y + (600/16), 0 );
+        if (color) glColor3f(1,1,1);
+        else glColor3f(0,0,0);
+        glBegin(GL_TRIANGLE_FAN);
+            glVertex2f(0,0);
+            for (float i = 0; i < (2*PI) + 0.1f; i += 0.1f) glVertex2f(25*cosf(i), 25*sinf(i));
+        glEnd();
+        glPopMatrix();
+      }
+  }
+};
+
+class Tablero {
+public:
+  Ficha ficha[8][8];
+  bool turno;
+  int fichas[2];
+
+  void Pintar() {
+      //Pintar fondo
+      glColor3f(0,0,0.1f);
+      glRectf(0,0,600,200);
+
+      //Pintar cuadros alternos
+      bool alt = 0;
+        for (int i = 0; i < 8; i++) {
+          for (int j = 0; j < 8; j++) {
+            alt = !alt;
+            if (alt) { glColor3ub(213,165,0); }
+            else { glColor3ub(234,182,0); }
+            glBegin(GL_QUADS);
+            glVertex2f(i*(600/8),200 + j*(600/8));
+            glVertex2f(i*(600/8),200 + (j+1)*(600/8));
+            glVertex2f((i+1)*(600/8),200 + (j+1)*(600/8));
+            glVertex2f((i+1)*(600/8),200 + j*(600/8));
+            glEnd();
+          }
+          alt = !alt;
+        }
+
+
+      //Pintar fichas
+      for (int i = 0; i < 8; i++) for (int j = 0; j < 8; j++) ficha[i][j].Pintar(i,j);
+
+      //Informe del juego inferior
+      sprintf(texto0,"Turno del jug.%i (Negras: jug.1 - Blancas: jug.2)",turno+1);
+      sprintf(texto1,"Fichas blancas: %i, negras: %i, quedan: %i",fichas[1], fichas[0], 64-fichas[0]-fichas[1]);
+      sprintf(texto2,"Ahora gana jug.%i (ante el empate pierde el jug.1 que es quien empieza)", (fichas[1] >= fichas[0]) + 1);
+
+      glColor3f(1,1,1);
+      glRasterPos2f(5,150);
+      for (int i=0; i<strlen(texto0); i++) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, texto0[i]);
+      glRasterPos2f(5,100);
+      for (int i=0; i<strlen(texto1); i++) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, texto1[i]);
+      glRasterPos2f(5,50);
+      for (int i=0; i<strlen(texto2); i++) glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, texto2[i]);
+  }
+
+  void Iniciar() {
+      for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            if ((i == 3 || i == 4) && (j == 3 || j == 4)) {
+              ficha[i][j].existe = 1;
+              ficha[i][j].color = (i+j) % 2;
+            }
+            else ficha[i][j].existe = 0;
+        }
+      }
+      turno = 0;
+      fichas[0] = fichas[1] = 2;
+  }
+
+  void Clickar() {
+      if (click) {
+        if (raton[1] >= 200) {
+            //Obtener posicion del ratón sobre el tablero en x e y
+            float X = raton[0] / 75, Y = (raton[1]-200) / 75;
+            int x = (int) X, y = (int) Y;
+
+            //Guardar en libre[][] si hay ya fichas alrededor
+            bool libre[3][3] = { {0,0,0}, {0,1,0}, {0,0,0} };
+
+            //Si estamos en el borde inferior
+            if (y == 0) {
+              if (x == 0) {
+                  libre[0][0] = libre[1][0] = libre[2][0] = libre[0][1] = libre[0][2] = 0;
+                  libre[2][1] = ficha[x+1][y].existe;
+                  libre[1][2] = ficha[x][y+1].existe;
+                  libre[2][2] = ficha[x+1][y+1].existe;
+              }
+              if (x == 7) {
+                  libre[0][0] = libre[1][0] = libre[2][0] = libre[2][1] = libre[2][2] = 0;
+                  libre[0][1] = ficha[x-1][y].existe;
+                  libre[1][2] = ficha[x][y+1].existe;
+                  libre[0][2] = ficha[x-1][y+1].existe;
+              }
+              else {
+                  libre[0][0] = libre[1][0] = libre[2][0] = 0;
+                  libre[0][1] = ficha[x-1][y].existe;
+                  libre[2][1] = ficha[x+1][y].existe;
+                  libre[0][2] = ficha[x-1][y+1].existe;
+                  libre[1][2] = ficha[x][y+1].existe;
+                  libre[2][2] = ficha[x+1][y+1].existe;
+              }
+            }
+            //Si estamos en el borde superior
+            else if (y == 7) {
+              if (x == 0) {
+                  libre[0][2] = libre[1][2] = libre[2][2] = libre[0][1] = libre[0][2] = 0;
+                  libre[2][1] = ficha[x+1][y].existe;
+                  libre[1][2] = ficha[x][y+1].existe;
+                  libre[2][2] = ficha[x+1][y+1].existe;
+              }
+              if (x == 7) {
+                  libre[0][2] = libre[1][2] = libre[2][2] = libre[2][1] = libre[2][2] = 0;
+                  libre[0][1] = ficha[x-1][y].existe;
+                  libre[0][0] = ficha[x-1][y-1].existe;
+                  libre[1][0] = ficha[x][y-1].existe;
+              }
+              else {
+                  libre[0][2] = libre[1][2] = libre[2][2] = 0;
+                  libre[0][1] = ficha[x-1][y].existe;
+                  libre[2][1] = ficha[x+1][y].existe;
+                  libre[0][0] = ficha[x-1][y-1].existe;
+                  libre[1][0] = ficha[x][y-1].existe;
+                  libre[2][0] = ficha[x+1][y-1].existe;
+              }
+            }
+            //Si estamos por medio
+            else {
+              if (x == 0) {
+                  libre[0][0] = libre[0][1] = libre[0][2] = 0;
+                  libre[1][0] = ficha[x][y-1].existe;
+                  libre[1][2] = ficha[x][y+1].existe;
+                  libre[2][0] = ficha[x+1][y-1].existe;
+                  libre[2][1] = ficha[x+1][y].existe;
+                  libre[2][2] = ficha[x+1][y+1].existe;
+              }
+              if (x == 7) {
+                  libre[2][0] = libre[2][1] = libre[2][2] = 0;
+                  libre[0][0] = ficha[x-1][y-1].existe;
+                  libre[0][1] = ficha[x-1][y].existe;
+                  libre[0][2] = ficha[x-1][y+1].existe;
+                  libre[1][0] = ficha[x][y-1].existe;
+                  libre[1][2] = ficha[x][y+1].existe;
+              }
+              else {
+                  libre[0][0] = ficha[x-1][y-1].existe;
+                  libre[0][1] = ficha[x-1][y].existe;
+                  libre[0][2] = ficha[x-1][y+1].existe;
+                  libre[1][0] = ficha[x][y-1].existe;
+                  libre[1][2] = ficha[x][y+1].existe;
+                  libre[2][0] = ficha[x+1][y-1].existe;
+                  libre[2][1] = ficha[x+1][y].existe;
+                  libre[2][2] = ficha[x+1][y+1].existe;
+              }
+            }
+
+            //Permitir poner ficha si alrededor hay al menos una ficha y no hay ya una ficha en esa posicion
+            if (!ficha[x][y].existe && (libre[0][0] || libre[0][1] || libre[0][2] || libre[1][0] || libre[1][2] || libre[2][0] || libre[2][1] || libre[2][2] )) {
+              ficha[x][y].color = turno;
+              ficha[x][y].existe = 1;
+              click = 0;
+              fichas[turno]++;
+
+              //Examinar que fichas deben cambiar hacia arriba
+              for (int e = (y+1); e < 8; e++) {
+                  if (!ficha[x][e].existe) { break; }
+                  if (ficha[x][e].color == turno) {
+                    for (int k = (y+1); k < e; k++) { ficha[x][k].color = turno; fichas[turno]++; fichas[!turno]--; }
+                    break;
+                  }
+              }
+
+              //Examinar que fichas deben cambiar hacia abajo
+              for (int e = (y-1); e >= 0; e--) {
+                  if (!ficha[x][e].existe) { break; }
+                  if (ficha[x][e].color == turno) {
+                    for (int k = (y-1); k > e; k--) { ficha[x][k].color = turno; fichas[turno]++; fichas[!turno]--;}
+                    break;
+                  }
+              }
+
+              //Examinar que fichas deben cambiar hacia la derecha
+              for (int e = (x+1); e < 8; e++) {
+                  if (!ficha[e][y].existe) { break; }
+                  if (ficha[e][y].color == turno) {
+                    for (int k = (x+1); k < e; k++) { ficha[k][y].color = turno; fichas[turno]++; fichas[!turno]--;}
+                    break;
+                  }
+              }
+
+              //Examinar que fichas deben cambiar hacia la izquierda
+              for (int e = (x-1); e >= 0; e--) {
+                  if (!ficha[e][y].existe) { break; }
+                  if (ficha[e][y].color == turno) {
+                    for (int k = (x-1); k > e; k--) { ficha[k][y].color = turno; fichas[turno]++; fichas[!turno]--;}
+                    break;
+                  }
+              }
+
+              int e, f;
+              //Examinar que fichas deben cambiar hacia la diagonal NE
+              e = (x+1);
+              f = (y+1);
+              while (e < 8 && f < 8) {
+                  if (!ficha[e][f].existe) { break; }
+                  if (ficha[e][f].color == turno) {
+                    int k = (x+1), l = (y+1);
+                    while (k < e && l < f) {
+                        ficha[k][l].color = turno;
+                        fichas[turno]++;
+                        fichas[!turno]--;
+                        k++;
+                        l++;
+                    }
+                    break;
+                  }
+                  e++;
+                  f++;
+              }
+
+              //Examinar que fichas deben cambiar hacia la diagonal NO
+              e = (x-1);
+              f = (y+1);
+              while (e >= 0 && f < 8) {
+                  if (!ficha[e][f].existe) { break; }
+                  if (ficha[e][f].color == turno) {
+                    int k = (x-1), l = (y+1);
+                    while (k > e && l < f) {
+                        ficha[k][l].color = turno;
+                        fichas[turno]++;
+                        fichas[!turno]--;
+                        k--;
+                        l++;
+                    }
+                    break;
+                  }
+                  e--;
+                  f++;
+              }
+
+              //Examinar que fichas deben cambiar hacia la diagonal SE
+              e = (x+1);
+              f = (y-1);
+              while (e < 8 && f >= 0) {
+                  if (!ficha[e][f].existe) { break; }
+                  if (ficha[e][f].color == turno) {
+                    int k = (x+1), l = (y-1);
+                    while (k < e && l > f) {
+                        ficha[k][l].color = turno;
+                        fichas[turno]++;
+                        fichas[!turno]--;
+                        k++;
+                        l--;
+                    }
+                    break;
+                  }
+                  e++;
+                  f--;
+              }
+
+              //Examinar que fichas deben cambiar hacia la diagonal SO
+              e = (x-1);
+              f = (y-1);
+              while (e >= 0 && f >= 0) {
+                  if (!ficha[e][f].existe) { break; }
+                  if (ficha[e][f].color == turno) {
+                    int k = (x-1), l = (y-1);
+                    while (k > e && l > f) {
+                        ficha[k][l].color = turno;
+                        fichas[turno]++;
+                        fichas[!turno]--;
+                        k--;
+                        l--;
+                    }
+                    break;
+                  }
+                  e--;
+                  f--;
+              }
+
+              //Pasar turno
+              turno = !turno;
+            }
+        }
+      }
+  }
+} tab;
+
+void PintarEscena() {
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glOrtho(0,600,0,800,-1,1);
+
+  glMatrixMode(GL_MODELVIEW);
+  glClear(GL_COLOR_BUFFER_BIT);
+  glLoadIdentity();
+
+  tab.Pintar();
+
+      glutSwapBuffers();
+}
+
+void ReProyectar(int w, int h) {
+  glutReshapeWindow(600,800);
+  glViewport(0, 0, w, h);
+
+      PintarEscena();
+}
+
+void Mover(int value) {
+  glutTimerFunc(16,Mover,1);
+  glutPostRedisplay();
+
+  tab.Clickar();
+}
+
+void Raton(int button, int state, int x, int y) {
+  if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) click = 1;
+  if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) click = 0;
+  raton[0] = x;
+  raton[1] = 800 - y;
+}
+
+void RatonMov(int x, int y) {
+  raton[0] = x;
+  raton[1] = 800 - y;
+}
+
+int main(int argc, char **argv) {
+      glutInit(&argc,argv);
+  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
+    glutInitWindowSize(600,800);
+    glutInitWindowPosition(40,40);
+    glutCreateWindow("Othello por HarZe");
+
+  tab.Iniciar();
+
+    glutReshapeFunc(ReProyectar);
+  glutDisplayFunc(PintarEscena);
+  glutMouseFunc(Raton);
+  glutMotionFunc(RatonMov);
+  glutPassiveMotionFunc(RatonMov);
+    glutTimerFunc(16,Mover,1);
+
+    glutMainLoop();
+  return 0;
+}

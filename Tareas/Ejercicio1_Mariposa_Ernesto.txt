@@ -1,0 +1,122 @@
+#include <windows.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+#include<cmath>
+#include <stdlib.h>
+#define M_PI 3.1415
+
+float blanco[]={1,1,1};
+float negro[]={0,0,0},azul[]={0,0,1};
+float rojo[]={1,0,0},verde[]={0,1,0}, amarillo[]={1,1,0};
+float cyan[]={0,1,1}, rosa[]={1,0.5,0.5}, naranja[]={1,0.8,0}, gris[]={0.6,0.6,0.6};
+
+void inicio ()
+{
+    glMatrixMode(GL_PROJECTION);
+    int a=10;
+    gluOrtho2D(-a,a,-a,a);
+}
+
+void circulos (float x, float y, float r,float theta1, float theta2, float n, float *color, float l)
+{
+    glColor3fv(color);
+    glLineWidth(l);
+    glBegin(GL_LINE_STRIP);
+
+    for(float i=0;i<n;i++)
+    {
+        for (float T=theta1 ; T<theta2 ;T=T+0.01)
+        {
+            glVertex2f(r*cos(T)+x,r*sin(T)+y+2*r*i);
+        }
+    }
+    glEnd();
+}
+
+void cuadrado(float x,float y,float lado,float *color,float l)
+{
+    glColor3fv(color);
+    glLineWidth(l);
+    glBegin(GL_LINE_LOOP);
+    glVertex2f(x,y);
+    glVertex2f(x+lado,y);
+    glVertex2f(x+lado,y+lado);
+    glVertex2f(x,y+lado);
+
+    glEnd();
+}
+
+void elipse2(float *XY, float a, float b, float t, float theta1, float theta2)
+{
+    glBegin(GL_LINE_STRIP);
+    glColor3f(0, 0, 0);
+    for (float T = theta1; T < theta2; T += 0.01) {
+        float x = a*cos(T);
+        float y = b*sin(T);
+        glVertex2f(x*cos(t)-y*sin(t)+XY[0],x*sin(t)+y*cos(t)+XY[1]);
+    }
+
+    glEnd();
+}
+
+void elipse(float m, float n, float p, float q, float theta1, float theta2, float *color, float l)
+{
+    glColor3fv(color);
+    glLineWidth(l);
+    glBegin(GL_LINE_STRIP);
+    for (float T=theta1 ; T<theta2 ;T=T+0.01)
+        {
+            glVertex2f(m+n*cos(T),p+q*sin(T));
+        }
+    glEnd();
+}
+
+
+void display(void)
+{
+    glClearColor(1,1,1,1);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    circulos(0.0,-3.17,sqrt(0.34),3*M_PI/2,9*M_PI/2,6,negro,3);
+    cuadrado(-1,3.28,2,negro,3);
+    elipse(3.44,sqrt(8.68),5.28,sqrt(2.71),0.57*M_PI,M_PI,negro,3);
+    elipse(-3.44,sqrt(8.68),5.28,sqrt(2.71),0*M_PI,0.42*M_PI,negro,3);
+    circulos(-3.49,6.93,sqrt(0.58),0*M_PI,2*M_PI,1,negro,3);
+    circulos(3.49,6.93,sqrt(0.5),0*M_PI,2*M_PI,1,negro,3);
+
+    float a[]={3.1,2.0};
+    float b[]={-3.1,2.0};
+    float c[]={-3.1,-2.0};
+    float d[]={3.1,-2.0};
+    elipse2(a,sqrt(8.22),sqrt(1.46),30*M_PI/180,0,2*M_PI);
+    elipse2(b,sqrt(8.22),sqrt(1.46),150*M_PI/180,0,2*M_PI);
+    elipse2(c,sqrt(8.22),sqrt(1.46),210*M_PI/180,0,2*M_PI);
+    elipse2(d,sqrt(8.22),sqrt(1.46),330*M_PI/180,0,2*M_PI);
+
+
+    glutSwapBuffers();
+}
+
+
+int main(int argc, char *argv[])
+{
+    glutInit(&argc, argv); //Inicializar la ventana
+
+    glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE|GLUT_DEPTH);//Especifica el tipo de modo de visualizacion al crear una ventana(Activa el buffer de colores de tipo RGB
+
+    glutInitWindowPosition(10,10);//Posicion de la ventana
+    glutInitWindowSize(600,600); //Tamaño de la ventana
+    glutCreateWindow("EstrellaRara"); //Nombre que se le da a la ventana
+    glutDisplayFunc(display);
+
+
+    inicio();
+
+
+    glutMainLoop(); //Hace que aparezca la ventana
+    return EXIT_SUCCESS; //Puedes colocar tambien Return 0
+
+}

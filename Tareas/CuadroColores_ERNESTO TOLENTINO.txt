@@ -1,0 +1,119 @@
+#include <windows.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+#include<cmath>
+#include <stdlib.h>
+#define M_PI 3.1415
+
+float blanco[]={1,1,1};
+float negro[]={0,0,0},azul[]={0,0,1};
+float rojo[]={1,0,0},verde[]={0,1,0}, amarillo[]={1,1,0};
+float cyan[]={0,1,1}, rosa[]={1,0.5,0.5}, naranja[]={1,0.8,0}, gris[]={0.6,0.6,0.6};
+
+void inicio ()
+{
+    glMatrixMode(GL_PROJECTION);
+    int a=15;
+    gluOrtho2D(-a,a,-a,a);
+}
+
+
+void cuadradolinea (float x, float y, float lado, float s, float *color)
+{
+
+    glColor3fv(color);
+    glLineWidth(s);
+    glBegin(GL_LINE_LOOP);
+    glVertex2d(x,y);
+    glVertex2d(x,y+lado);
+    glVertex2d(x+lado,y+lado);
+    glVertex2d(x+lado,y);
+    glEnd();
+
+}
+
+void cuadrado(float x, float y, float z, float a, float b, float c, float d, float e, float *color, float s)
+{
+    glColor3fv(color);
+    glLineWidth(s);
+    glBegin(GL_QUADS);
+    glVertex2f(x,y);
+    glVertex2f(z,a);
+    glVertex2f(b,c);
+    glVertex2f(d,e);
+
+    glEnd();
+}
+
+
+void triangulo (float x, float y, float z, float a, float b, float c, float *color, float s)
+{
+    glColor3fv(color);
+    glLineWidth(s);
+    glBegin(GL_TRIANGLES);
+    glVertex2f(x,y);
+    glVertex2f(z,a);
+    glVertex2f(b,c);
+    glEnd();
+
+
+}
+
+
+void display(void)
+{
+    glClearColor(1,1,1,1);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+
+    triangulo(-2.42,4.3,-0.28,2.04,2.04,4.28,cyan,3);
+    triangulo(-2.42,4.3,-1.74,5.18,1.18,5.18,cyan,3);
+    triangulo(1.18,5.18,-2.42,4.3,2.04,4.28,cyan,3);
+
+    triangulo(2.04,4.28,2.88,5.18,4.4,5.18,naranja,3);
+    triangulo(2.04,4.28,4.4,5.18,4.24,2.04,naranja,3);
+
+    triangulo(-0.26,-2.4,-2.52,-4.74,1.98,-4.68,rosa,3);
+    triangulo(-2.52,-4.74,1.98,-4.68,-1.86,-5.42,rosa,3);
+    triangulo(1.98,-4.68,-1.86,-5.42,1.24,-5.48,rosa,3);
+
+    cuadrado(-2.52,-0.16,-0.28,2.04,-2.42,4.3,-4.74,2.1,amarillo,3);
+    cuadrado(-2.52,-0.16,-0.28,2.04,2,-0.16,-0.26,-2.4,rosa,3);
+    cuadrado(-0.28,2.04,2,-0.16,4.24,2.04,2.04,4.28,verde,3);
+    cuadrado(-2.52,-0.16,-0.26,-2.4,-2.52,-4.74,-4.82,-2.42,azul,3);
+    cuadrado(2,-0.16,-0.26,-2.4,1.98,-4.68,4.28,-2.42,amarillo,3);
+    triangulo(-3.34,5.18,-2.42,4.3,-1.74,5.18,verde,3);
+    triangulo(1.18,5.18,2.04,4.28,2.88,5.18,verde,3);
+    triangulo(4.28,-2.42,1.24,-5.48,4.42,-5.36,rojo,3);
+    triangulo(-2.52,-4.74,-3.22,-5.42,-1.86,-5.42,amarillo,3);
+    triangulo(2,-0.16,4.28,-2.42,4.24,2.04,azul,3);
+
+
+
+
+
+
+    glutSwapBuffers();
+ }
+
+int main(int argc, char *argv[])
+{
+    glutInit(&argc, argv); //Inicializar la ventana
+
+    glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE|GLUT_DEPTH);//Especifica el tipo de modo de visualizacion al crear una ventana(Activa el buffer de colores de tipo RGB
+
+    glutInitWindowPosition(10,10);//Posicion de la ventana
+    glutInitWindowSize(600,600); //Tamaño de la ventana
+    glutCreateWindow("Pregunta1"); //Nombre que se le da a la ventana
+    glutDisplayFunc(display);
+
+
+    inicio();
+
+
+    glutMainLoop(); //Hace que aparezca la ventana
+    return EXIT_SUCCESS; //Puedes colocar tambien Return 0
+
+}

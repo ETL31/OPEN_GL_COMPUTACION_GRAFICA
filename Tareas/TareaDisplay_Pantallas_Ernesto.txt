@@ -1,0 +1,157 @@
+#include <windows.h>
+#ifdef _APPLE_
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+#include <iostream>
+#include <cmath>
+#include <stdlib.h>
+#define M_PI 3.1415
+
+/* ------------------- INTEGRANTES--------------------------
+
+------- Ernesto Mihael Tolentino León-------------------
+------- Cristian Romer Lazo          -------------------
+
+
+float blanco[]={1,1,1};
+float negro[]={0,0,0},azul[]={0,0,1};
+float rojo[]={1,0,0},verde[]={0,1,0}, amarillo[]={1,1,0};
+float cyan[]={0,1,1}, rosa[]={1,0.5,0.5}, naranja[]={1,0.8,0}, gris[]={0.6,0.6,0.6};
+
+    //FUNCION PARA LA PANTALLA, TAMAÑO 20 X 20
+void inicio()
+{
+    glMatrixMode(GL_PROJECTION);
+    int a=20;
+    gluOrtho2D(-a,a,-a,a);
+}
+
+void circunferencia(float r, float x1, float y1, int patron1, float s,float *rgb)
+{
+    glColor3fv(rgb);
+    glLineWidth(s);
+
+    switch(patron1)
+    {
+        case 1: glBegin(GL_POINTS); break;
+        case 2: glBegin(GL_LINES); break;
+        case 3: glBegin(GL_LINE_LOOP); break;
+        case 4: glBegin(GL_POLYGON); break;
+    }
+
+    for(float theta=0; theta<2*M_PI; theta=theta+0.1)
+    {
+        glVertex2f(r*cos(theta)+x1,r*sin(theta)+y1);
+    }
+    glEnd();
+}
+
+//SI SE DESEA OPTIMIZAR LAS VENTANAS ESTAS NECESITAS ESTAR DENTRO DE UNA FUNCION O LA FUNCION PRINCIPAL
+//PERO EN LA FUNCION PRINCIPAL YA HACEMOS EL LLAMADO DE LA VENTANA, LE DAMOS PARAMETROS Y LLAMAMOS A LA FUNCION DISPLAY
+//ASI QUE COLOCAR NUEVAMENTE EN ESTA FUNCION EL DISPLAY SERIA INCORRECTO Y PERTURBARIA EL CODIGO
+//CON glutDisplayFunc(display) LO QUE HACEMOS ES DARLE EL NOMBRE A LA FUNCION DENTRO DEL MAIN PRINCIPAL ,
+// USAMOS EL glutMainLoop() PARA HACER QUE APAREZCA LA VENTANA
+// **OPCION PARA EL DESARROLLO CON FOR PARA 3 DISPLAY*
+   /*
+    for (int i=1; i<3 ; i++)
+    {
+    switch(i)
+    {
+    case 1:
+        display1(void);
+    break;
+    case 2:
+        display2(void);
+    break;
+    case 3:
+        display3(void);
+    break;
+    }
+    glClearColor(0,0,0,0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+ glutSwapBuffers();
+    */
+
+
+/*SUPONIENDO QUE EL CODIGO ES CORRECTO Y PODRIA FUNCIONAR
+NO SE OPTIMIZARIA ALGO GRANDE Y EL PROBLEMA MAS GRANDE SERIA DONDE PONER ESE FOR
+YA QUE NO HABRIA DONDE LLAMARLO, CON LO MENCIONADO ANTES QUEDARIA DESCARTADO
+HACER EL LLAMADO DESDE LA FUNCION PRINCIPAL, Y SI CREAMOS OTRA FUNCION TENDRIAMOS QUE DEFINIR LA VENTANA
+Y SI LO HACEMOS, ES INCOGRUENTE PENSAR EN METER UNA FUNCION QUE LLAME DISPLAYS DENTRO DE UNA VENTANA;
+POR ENDE CONCLUIREMOS QUE NO SERIA POSIBLE HACER EL LLAMADO DE VARIAS VENTANAS A TRAVEZ DE UNA SOLA FUNCION
+AÑADIENDO QUE TAMPOCO NOS AYUDARIA DE MUCHO EN LA OPTIMIZACION DEL CODIGO.*/
+
+//VENTANA 1
+void display1(void)
+{
+glClearColor(0.6,0.6,0.6,0.6);
+glClear(GL_COLOR_BUFFER_BIT);
+
+circunferencia(3,6,6,1,3,cyan);
+
+ glutSwapBuffers();
+}
+
+//VENTANA 2
+void display2(void)
+{
+glClearColor(1,1,1,1);
+glClear(GL_COLOR_BUFFER_BIT);
+
+circunferencia(3,-6,-6,2,3,naranja);
+
+ glutSwapBuffers();
+}
+
+//VENTANA 3
+void display3(void)
+{
+glClearColor(0,0,0,0);
+glClear(GL_COLOR_BUFFER_BIT);
+
+circunferencia(3,0,0,3,3,rojo);
+
+ glutSwapBuffers();
+}
+
+
+
+int main(int argc, char *argv[])
+{
+
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE|GLUT_DEPTH);
+    /*OPTIMIZAMOS LA PARTE DE LAS VENTANAS USAMOS UN BUCLE FOR PARA IR ITERANDO LOS CASOS
+    EL WINDOWSPOSITION SE MODIFICA CON EL ITERADOR I Y LA FORMULA (10+(i-1)*400
+    WINDOWSIZE MANTIENE LOS VALORES NORMALES 400 Y 400
+    USAMOS SWITCH PARA APROVECHAR EL ITERADOR I, EN ESTE CASO PARA 3 PANTALLAS, SI QUISIERAMOS MAS
+    PANTALLAS SOLO AUMENTARIAMOS EL RANGO DE ITERADOR Y AJUSTARIAMOS LOS VALORES, TAMBIEN LA FORMULA*/
+
+    for (int i=1; i<4; i++)
+    {
+    glutInitWindowPosition(10+(i-1)*440,10);
+    glutInitWindowSize(400,400);
+    switch (i)
+    {
+        case 1:
+            glutCreateWindow("ventana 1");
+            glutDisplayFunc(display1);
+        break;
+        case 2:
+            glutCreateWindow("ventana 2");
+            glutDisplayFunc(display2);
+        break;
+        case 3:
+            glutCreateWindow("ventana 3");
+            glutDisplayFunc(display3);
+        break;
+    }
+    inicio();
+    }
+
+    glutMainLoop();
+    return EXIT_SUCCESS;
+}

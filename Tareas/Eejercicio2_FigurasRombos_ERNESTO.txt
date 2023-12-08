@@ -1,0 +1,118 @@
+#include <windows.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+#include<cmath>
+#include <stdlib.h>
+#define M_PI 3.1415
+
+float blanco[]={1,1,1};
+float negro[]={0,0,0},azul[]={0,0,1};
+float rojo[]={1,0,0},verde[]={0,1,0}, amarillo[]={1,1,0};
+float cyan[]={0,1,1}, rosa[]={1,0.5,0.5}, naranja[]={1,0.8,0}, gris[]={0.6,0.6,0.6};
+
+void inicio ()
+{
+    glMatrixMode(GL_PROJECTION);
+    int a=10;
+    gluOrtho2D(-a,a,-a,a);
+}
+
+void paravert(float x,float y,float n, float l,float *color)
+{
+    glColor3fv(color);
+    glLineWidth(l);
+    glBegin(GL_LINE_STRIP);
+    for (float i=0;i<n;i++)
+    {
+        glVertex2f(x,y-2*i*sqrt(3));
+        glVertex2f(x,y-2*i*sqrt(3)-2*sqrt(3));
+        glVertex2f(x-1,y-2*i*sqrt(3)-sqrt(3));
+        glVertex2f(x,y-2*i*sqrt(3));
+        glVertex2f(x+1,y-2*i*sqrt(3)-sqrt(3));
+        glVertex2f(x,y-2*i*sqrt(3)-2*sqrt(3));
+    }
+    glEnd();
+}
+
+void parahor1(float x,float y,float n, float l,float *color)
+{
+    glColor3fv(color);
+    glLineWidth(l);
+    glBegin(GL_LINE_STRIP);
+    for (float i=0;i<n;i++)
+    {
+        glVertex2f(x-3*i,y-i*sqrt(3));
+        glVertex2f(x-3*i-3,y-i*sqrt(3)-sqrt(3));
+        glVertex2f(x-3*i-2,y-i*sqrt(3));
+        glVertex2f(x-3*i,y-i*sqrt(3));
+        glVertex2f(x-3*i-1,y-i*sqrt(3)-sqrt(3));
+        glVertex2f(x-3*i-3,y-i*sqrt(3)-sqrt(3));
+    }
+    glEnd();
+}
+
+void parahor2(float x,float y,float n, float l,float *color)
+{
+    glColor3fv(color);
+    glLineWidth(l);
+    glBegin(GL_LINE_STRIP);
+    for (float i=0;i<n;i++)
+    {
+        glVertex2f(x-3*i,y+i*sqrt(3));
+        glVertex2f(x-3*i-3,y+i*sqrt(3)+sqrt(3));
+        glVertex2f(x-3*i-1,y+i*sqrt(3)+sqrt(3));
+        glVertex2f(x-3*i,y+i*sqrt(3));
+        glVertex2f(x-3*i-2,y+i*sqrt(3));
+        glVertex2f(x-3*i-3,y+i*sqrt(3)+sqrt(3));
+    }
+    glEnd();
+}
+
+void display(void)
+{
+    glClearColor(0,0,0,0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    //Verticales
+    paravert(0.0,6.92,4,2,cyan);
+    paravert(-3.0,5.19,3,2,gris);
+    paravert(3.0,5.19,3,2,naranja);
+
+    //Horizontal Derecha
+    parahor1(3.0,5.19,3,2,amarillo);
+    parahor1(6.0,3.46,4,2,verde);
+    parahor1(6.0,0.0,3,2,rosa);
+
+    //Horizontal Izquierda
+    parahor2(3.0,-5.19,3,2,gris);
+    parahor2(6.0,-3.46,4,2,azul);
+    parahor2(6.0,0.0,3,2,rojo);
+
+
+
+    glutSwapBuffers();
+}
+
+
+int main(int argc, char *argv[])
+{
+    glutInit(&argc, argv); //Inicializar la ventana
+
+    glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE|GLUT_DEPTH);//Especifica el tipo de modo de visualizacion al crear una ventana(Activa el buffer de colores de tipo RGB
+
+    glutInitWindowPosition(10,10);//Posicion de la ventana
+    glutInitWindowSize(600,600); //Tamaño de la ventana
+    glutCreateWindow("EstrellaRara"); //Nombre que se le da a la ventana
+    glutDisplayFunc(display);
+
+
+    inicio();
+
+
+    glutMainLoop(); //Hace que aparezca la ventana
+    return EXIT_SUCCESS; //Puedes colocar tambien Return 0
+
+}

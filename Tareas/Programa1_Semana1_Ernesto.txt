@@ -1,0 +1,145 @@
+#include <windows.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+
+#include <stdlib.h>
+
+void inicio ()
+{
+    glMatrixMode(GL_PROJECTION);
+    int a=8;
+    gluOrtho2D(-a,a,-a,a);
+}
+
+void display (void)
+{
+    glClearColor(0,0,0,0); //opcional:color de la venta (negro)
+    glClear(GL_COLOR_BUFFER_BIT);
+    glColor3f(1,0,0);
+
+    glBegin(GL_POLYGON);//Forma un poligono
+    glVertex2f(-7,7);
+    glVertex2f(-6,7);
+    glVertex2f(-6,6);
+    glVertex2f(-7,6);
+    glVertex2f(-5,7);
+    glVertex2f(-4,7);
+    glVertex2f(-4,6);
+    glVertex2f(-5,6);
+
+    glEnd();
+
+
+    glColor3f(1,1,0);
+    glBegin(GL_QUAD_STRIP);
+    glVertex2f(-3,7);
+    glVertex2f(-2,7);
+    glVertex2f(-2,6);
+    glVertex2f(-3,6);
+    glVertex2f(-2,7);
+    glVertex2f(-1,7);
+    glVertex2f(-1,6);
+    glVertex2f(-2,6);
+
+    glEnd();
+
+    glColor3f(1,1,1);
+    glBegin(GL_QUADS);//Cuadrado sombreado.
+    glVertex2f(0,7);
+    glVertex2f(1,7);
+    glVertex2f(1,6);
+    glVertex2f(0,6);
+
+    glEnd();
+
+    glColor3f(0,1,0);
+    glBegin(GL_TRIANGLE_FAN);//Forma un triangulo de 1,2,3 y 1,3,4.
+    glVertex2f(-6,4);
+    glVertex2f(-7,4);
+    glVertex2f(-6,5);
+    glVertex2f(-5,5);
+
+    glEnd();
+
+    glColor3f(0,1,1);
+    glBegin(GL_TRIANGLE_STRIP); //Forma un triangulo de 1,2,3 y 2,3,4.
+    glVertex2f(-2,3);
+    glVertex2f(-3,4);
+    glVertex2f(-3,5);
+    glVertex2f(-4,3);
+
+    glEnd();
+
+    glColor3f(0,0,1);
+    glBegin(GL_TRIANGLES); //Forma el triángulo de 3 en 3
+    glVertex2f(0,4);
+    glVertex2f(-1,4);
+    glVertex2f(-1,5);
+    glVertex2f(0,3);
+    glVertex2f(-1,3);
+    glVertex2f(0,2);
+
+    glEnd();
+
+    glColor3f(1,0,1);
+    glBegin(GL_LINE_LOOP); //Une los puntos consecutivos del principio al final
+    glVertex2f(1,4);
+    glVertex2f(1,5);
+    glVertex2f(2,3);
+    glVertex2f(2,2);
+
+    glEnd();
+
+    glColor3f(1,0.5,0.5);
+    glBegin(GL_LINE_STRIP); //Une los puntos de manera consecutivo
+    glVertex2f(3,4);
+    glVertex2f(4,4);
+    glVertex2f(4,5);
+    glVertex2f(3,3);
+
+    glEnd();
+
+    glColor3f(1,0.8,0);
+    glPointSize(5); //Funciona para incrementar el tamaño del punto
+    glBegin(GL_POINTS);
+    glVertex2f(-7,1);
+    glVertex2f(-7,0);
+    glVertex2f(-6,1);
+    glVertex2f(-6,0);
+
+    glEnd();
+
+    glColor3f(0.6,0.6,0.6);
+    glLineWidth(7);//Funciona para incrementar el tamaño de la linea
+    glBegin(GL_LINES);
+    glVertex2f(-5,1);
+    glVertex2f(-5,0);
+    glVertex2f(-4,1);
+    glVertex2f(-4,0);
+
+    glEnd();
+
+
+    glutSwapBuffers();
+
+}
+
+int main(int argc, char *argv[])
+{
+    glutInit(&argc, argv); //Inicializar la ventana
+    glutInitWindowPosition(0,0);//Posicion de la ventana
+    glutInitWindowSize(600,600); //Tamaño de la ventana
+    glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE|GLUT_DEPTH);//Especifica el tipo de modo de visualizacion al crear una ventana(Activa el buffer de colores de tipo RGB
+
+    glutCreateWindow("Primer programa"); //Nombre que se le da a la ventana
+    glutDisplayFunc(display);
+    inicio();
+
+
+    glutMainLoop(); //Hace que aparezca la ventana
+    return EXIT_SUCCESS; //Puedes colocar tambien Return 0
+
+}

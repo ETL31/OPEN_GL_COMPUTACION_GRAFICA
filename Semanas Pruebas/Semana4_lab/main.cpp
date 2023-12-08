@@ -1,0 +1,59 @@
+#include <windows.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+#include <stdlib.h>
+void display(void)
+{
+glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+GLubyte megaman[] = {
+0xff, 0xff, 0xff, 0xff,
+0x80, 0x0, 0x0, 0x1,
+0x80, 0x0, 0x0, 0x1,
+0x80, 0x7f, 0xfe, 0x1,
+0x80, 0x80, 0x1, 0xc1,
+0x83, 0x81, 0xfe, 0x61,
+0x8f, 0x0, 0x0, 0x21,
+0x8f, 0x0, 0x71, 0x21,
+0x91, 0x0, 0x71, 0x21,
+0x91, 0x80, 0xe, 0x21,
+0x91, 0xff, 0xff, 0xe1,
+0x87, 0xff, 0xff, 0xe1,
+0x87, 0xff, 0xff, 0x81,
+0x81, 0xff, 0x86, 0x1,
+0x80, 0xfc, 0x30, 0x1,
+0xff, 0xff, 0xff, 0xff,   } ;
+
+glColor3f(0,1,0);
+glEnable(GL_POLYGON_STIPPLE);
+glPolygonStipple(megaman);
+glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+   glBegin(GL_POLYGON);
+      glVertex2d(-1,1);
+      glVertex2d(1,1);
+      glVertex2d(1,-1);
+      glVertex2d(-1,-1);
+   glEnd();
+glDisable(GL_POLYGON_STIPPLE);
+ glutSwapBuffers();
+ glFlush();
+}
+
+
+int main(int argc, char *argv[])
+{
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH );
+    glutInitWindowSize(500,500);
+    glClearColor(0,0,0,0);
+    glutInitWindowPosition(0,0);
+    glutCreateWindow("Pregunta 1a");
+    glutDisplayFunc(display);
+
+
+    glutMainLoop();
+    return EXIT_SUCCESS;
+}

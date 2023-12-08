@@ -1,0 +1,215 @@
+#include <windows.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+#include <stdlib.h>
+
+float blanco[]={1,1,1};
+float negro[]={0,0,0},azul[]={0,0,1};
+float rojo[]={1,0,0},verde[]={0,1,0}, amarillo[]={1,1,0};
+float cyan[]={0,1,1}, rosa[]={1,0.5,0.5}, naranja[]={1,0.8,0}, gris[]={0.6,0.6,0.6};
+
+void inicio ()
+{
+    glMatrixMode(GL_PROJECTION);
+    int a=10;
+    gluOrtho2D(-a,a,-a,a);
+}
+
+void linea(float x,float y, float a, float b, float c, float d, float e, float f, float g, float h,float *rgb)
+{
+    glColor3fv(rgb);
+    glEnable(GL_LINE_STIPPLE);
+    glLineWidth(3);
+    glBegin(GL_LINE_STRIP);
+    glVertex2d(x,y);
+    glVertex2d(a,b);
+    glVertex2d(c,d);
+    glVertex2d(e,f);
+    glVertex2d(g,h);
+    glEnd();
+    glDisable(GL_LINE_STIPPLE);
+
+}
+
+void lineastipple(float x,float y, float a, float b, float c, float d, float e, float f, float g, float h,float *rgb,int patron3)
+{
+    glColor3fv(rgb);
+    glEnable(GL_LINE_STIPPLE);
+
+    switch(patron3)
+    {
+        case 1: glLineStipple(1,0x0101); break;
+        case 2: glLineStipple(1,0xAAAA); break;
+        case 3: glLineStipple(1,0x00FF); break;
+        case 4: glLineStipple(1,0x0C0F); break;
+        case 5: glLineStipple(1,0x1C47); break;
+    }
+
+
+    glLineWidth(3);
+    glBegin(GL_LINE_STRIP);
+    glVertex2d(x,y);
+    glVertex2d(a,b);
+    glVertex2d(c,d);
+    glVertex2d(e,f);
+    glVertex2d(g,h);
+    glEnd();
+    glDisable(GL_LINE_STIPPLE);
+
+}
+
+void poligono(float m, float n, float x1, float y1, float x2, float y2, float x3, float y3,float x4,float y4,float x5,float y5, int patron1, int patron2, float *rgb)
+{
+    glColor3fv(rgb);
+    glEnable(GL_LINE_STIPPLE);
+
+    switch(patron1)
+    {
+        case 1: glLineStipple(1,0x0101); break;
+        case 2: glLineStipple(1,0xAAAA); break;
+        case 3: glLineStipple(1,0x00FF); break;
+        case 4: glLineStipple(1,0x0C0F); break;
+        case 5: glLineStipple(1,0x1C47); break;
+    }
+
+    switch(patron2)
+    {
+        case 1: glPolygonMode(GL_FRONT_AND_BACK, GL_POINT); break;
+        case 2: glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); break;
+        case 3: glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); break;
+    }
+
+    glLineWidth(3);
+    glBegin(GL_POLYGON);
+    glVertex2d(m,n);
+    glVertex2d(x1,y1);
+    glVertex2d(x2,y2);
+    glVertex2d(x3,y3);
+    glVertex2d(x4,y4);
+    glVertex2d(x5,y5);
+    glEnd();
+    glDisable(GL_LINE_STIPPLE);
+}
+
+void display (void)
+{
+    glClearColor(1,1,1,1); //opcional:color de la venta (negro)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //base del arco
+    linea(-6.56,-8.81,-6.55,-6.97,-5.87,-6.62,-4.0,-6.0,-3.27,-6.18,negro);
+    linea(-3.27,-6.18,-2.59,-5.91,-1.72,-5.86,-0.72,-6.02,0.0,-6.0,negro);
+    linea(0.0,-6.0,1.34,-6.05,2.59,-6.08,5.38,-5.97,5.44,-8.81,negro);
+    linea(5.44,-8.81,-6.56,-8.81,-6.55,-6.97,-6.57,-4.6,-6.23,-4.61,negro);
+    linea(0.0,-6.0,-0.83,-5.45,-1.21,-5.04,-1.81,-5.26,-3.05,-4.48,negro);
+    linea(-3.05,-4.48,-4.35,-5.04,-4.68,-4.64,-5.74,-5.04,-6.23,-4.61,negro);
+
+    //Base2 del arco
+
+    lineastipple(-6.23,-4.61,-5.94,-4.72,-4.97,-4.37,-4.3,-4.66,-4.35,-5.04,negro,2);
+    lineastipple(-4.3,-4.66,-3.05,-4.48,-1.52,-4.52,-0.73,-4.64,-0.83,-5.45,negro,2);
+    lineastipple(-0.73,-4.64,0.32,-4.42,1.35,-4.62,1.34,-6.05,1.34,-6.05,negro,2);
+    lineastipple(1.35,-4.62,2.22,-4.33,3.13,-4.76,3.3,-4.46,4.37,-4.25,negro,2);
+    lineastipple(4.37,-4.25,5.15,-4.62,5.43,-4.53,5.38,-5.97,5.38,-5.97,negro,2);
+    lineastipple(-6.57,-4.23,-6.23,-4.61,-5.94,-4.72,-4.97,-4.37,-4.94,-3.02,negro,2);
+
+
+    poligono(-6.57,-4.23,-6.23,-4.61,-5.94,-4.72,-4.97,-4.37,-4.94,-3.02,-6.55,-3.01,3,3,negro);
+    poligono(-6.57,-4.23,-6.23,-4.61,-5.94,-4.72,-4.97,-4.37,-4.94,-3.02,-6.55,-3.01,2,2,cyan);
+
+    poligono(-4.94,-3.02,-4.97,-4.37,-4.3,-4.66,-3.05,-4.48,-3.12,-2.97,-3.91,-2.95,3,3,negro);
+    poligono(-4.94,-3.02,-4.97,-4.37,-4.3,-4.66,-3.05,-4.48,-3.12,-2.97,-3.91,-2.95,2,2,cyan);
+
+    poligono(-3.05,-4.48,-3.12,-2.97,-1.88,-2.9,-1.88,-3.01,-3.05,-4.48,-1.88,-3.01,2,3,negro);
+    poligono(-3.05,-4.48,-3.12,-2.97,-1.88,-2.9,-1.88,-3.01,-3.05,-4.48,-1.88,-3.01,2,2,cyan);
+
+    poligono(-3.05,-4.48,-1.88,-2.9,-1.5,-3.0,-1.52,-4.52,-3.05,-4.48,-3.05,-4.48,4,3,negro);
+    poligono(-3.05,-4.48,-1.88,-2.9,-1.5,-3.0,-1.52,-4.52,-3.05,-4.48,-3.05,-4.48,4,2,cyan);
+
+    poligono(-1.5,-3.0,0.26,-2.97,0.32,-4.42,-0.73,-4.64,-1.52,-4.52,-1.52,-4.52,2,3,negro);
+    poligono(-1.5,-3.0,0.26,-2.97,0.32,-4.42,-0.73,-4.64,-1.52,-4.52,-1.52,-4.52,2,2,cyan);
+
+    poligono(0.26,-2.97,2.1,-2.91,2.28,-2.92,2.22,-4.33,1.35,-4.62,0.32,-4.42,5,3,negro);
+    poligono(0.26,-2.97,2.1,-2.91,2.28,-2.92,2.22,-4.33,1.35,-4.62,0.32,-4.42,5,2,cyan);
+
+    poligono(2.28,-2.92,2.5,-2.89,4.38,-2.86,4.36,-4.25,3.3,-4.46,2.22,-4.33,2,3,negro);
+    poligono(2.28,-2.92,2.5,-2.89,4.38,-2.86,4.36,-4.25,3.3,-4.46,2.22,-4.33,2,2,cyan);
+
+    poligono(4.38,-2.86,5.42,-2.87,5.43,-4.53,5.15,-4.62,4.37,-4.25,4.37,-4.25,2,3,negro);
+    poligono(4.38,-2.86,5.42,-2.87,5.43,-4.53,5.15,-4.62,4.37,-4.25,4.37,-4.25,2,2,cyan);
+
+
+    poligono(-5.66,-2.99,-5.65,-0.24,-3.89,-0.21,-3.91,-2.95,-4.94,-3.02,-5.66,-2.99,1,3,negro);
+    poligono(-5.66,-2.99,-5.65,-0.24,-3.89,-0.21,-3.91,-2.95,-4.94,-3.02,-5.66,-2.99,1,2,naranja);
+
+    poligono(-3.89,-0.21,-3.91,-2.95,-3.12,-2.97,-1.88,-2.9,-1.9,-0.18,-3.89,-0.21,3,3,negro);
+    poligono(-3.89,-0.21,-3.91,-2.95,-3.12,-2.97,-1.88,-2.9,-1.9,-0.18,-3.89,-0.21,3,2,naranja);
+
+    poligono(-4.58,-0.22,-1.9,-0.18,-1.93,2.0,-4.58,2.0,-4.58,-0.22,-4.58,-0.22,3,3,negro);
+    poligono(-4.58,-0.22,-1.9,-0.18,-1.93,2.0,-4.58,2.0,-4.58,-0.22,-4.58,-0.22,3,2,rojo);
+
+    poligono(-4.16,2.0,-1.93,2.0,-1.95,4.0,-4.17,3.99,-4.16,2.0,-4.16,2.0,4,3,negro);
+    poligono(-4.16,2.0,-1.93,2.0,-1.95,4.0,-4.17,3.99,-4.16,2.0,-4.16,2.0,4,2,rosa);
+
+    poligono(-3.61,3.99,-1.95,4.0,-1.96,5.72,-3.61,5.72,-3.61,3.99,-3.61,3.99,5,3,negro);
+    poligono(-3.61,3.99,-1.95,4.0,-1.96,5.72,-3.61,5.72,-3.61,3.99,-3.61,3.99,5,2,cyan);
+
+    poligono(-2.98,5.72,-2.97,6.63,3.18,6.69,3.2,5.74,-2.98,5.72,-2.98,5.72,2,3,negro);
+    poligono(-2.98,5.72,-2.97,6.63,3.18,6.69,3.2,5.74,-2.98,5.72,-2.98,5.72,2,2,naranja);
+
+    poligono(-1.96,5.39,-1.96,5.72,2.29,5.71,1.96,5.36,-1.96,5.39,-1.96,5.39,2,3,negro);
+    poligono(-1.96,5.39,-1.96,5.72,2.29,5.71,1.96,5.36,-1.96,5.39,-1.96,5.39,2,2,negro);
+
+    poligono(2.29,5.71,3.93,5.71,4.0,4.04,2.33,4.03,2.29,5.71,2.29,5.71,3,3,negro);
+    poligono(2.29,5.71,3.93,5.71,4.0,4.04,2.33,4.03,2.29,5.71,2.29,5.71,3,2,cyan);
+
+    poligono( 2.33,4.03,4.42,4.04,4.43,2.01,2.38,2.01,2.33,4.03,2.33,4.03,4,3,negro);
+    poligono( 2.33,4.03,4.42,4.04,4.43,2.01,2.38,2.01,2.33,4.03,2.33,4.03,4,2,rosa);
+
+    poligono(2.38,2.01,5.0,2.01,5.0,-0.06,2.43,-0.1,2.38,2.01,2.38,2.01,5,3,negro);
+    poligono(2.38,2.01,5.0,2.01,5.0,-0.06,2.43,-0.1,2.38,2.01,2.38,2.01,5,2,rojo);
+
+    poligono(2.43,-0.1,4.28,-0.07,4.38,-2.86,2.5,-2.89,2.43,-0.1,2.43,-0.1,2,3,negro);
+    poligono(2.43,-0.1,4.28,-0.07,4.38,-2.86,2.5,-2.89,2.43,-0.1,2.43,-0.1,2,2,naranja);
+
+    poligono(5.43,-0.25,5.42,-2.87,4.38,-2.86,4.28,-0.07,5.43,-0.05,4.96,-0.29,3,3,negro);
+    poligono(5.43,-0.25,5.42,-2.87,4.38,-2.86,4.28,-0.07,5.43,-0.05,4.96,-0.29,3,2,naranja);
+
+    poligono(1.96,5.36,2.29,5.71,2.3,4.96,1.98,4.3,1.96,5.36,1.96,5.36,2,3,negro);
+    poligono(1.96,5.36,2.29,5.71,2.3,4.96,1.98,4.3,1.96,5.36,1.96,5.36,2,2,negro);
+
+    poligono(1.98,4.3,2.3,4.96,2.33,4.03,1.99,3.7,1.98,4.3,1.98,4.3,3,3,negro);
+    poligono(1.98,4.3,2.3,4.96,2.33,4.03,1.99,3.7,1.98,4.3,1.98,4.3,3,2,cyan);
+
+    poligono(1.99,3.7,2.33,4.03,2.38,2.01,2.02,1.73,1.99,3.7,1.99,3.7,4,3,negro);
+    poligono(1.99,3.7,2.33,4.03,2.38,2.01,2.02,1.73,1.99,3.7,1.99,3.7,4,2,rosa);
+
+    poligono(2.02,1.73,2.38,2.01,2.43,-0.1,2.06,-0.38,2.02,1.73,2.02,1.73,5,3,negro);
+    poligono(2.02,1.73,2.38,2.01,2.43,-0.1,2.06,-0.38,2.02,1.73,2.02,1.73,5,2,rojo);
+
+    poligono(2.06,-0.38,2.43,-0.1,2.5,-2.89,2.28,-2.92,2.1,-2.91,2.06,-0.38,2,3,negro);
+    poligono(2.06,-0.38,2.43,-0.1,2.5,-2.89,2.28,-2.92,2.1,-2.91,2.06,-0.38,2,2,naranja);
+
+
+
+    glutSwapBuffers();
+ }
+
+int main(int argc, char *argv[])
+{
+    glutInit(&argc, argv); //Inicializar la ventana
+    glutInitWindowPosition(0,0);//Posicion de la ventana
+    glutInitWindowSize(600,600); //Tamaño de la ventana
+    glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE|GLUT_DEPTH);//Especifica el tipo de modo de visualizacion al crear una ventana(Activa el buffer de colores de tipo RGB
+
+    glutCreateWindow("Pregunta1"); //Nombre que se le da a la ventana
+    glutDisplayFunc(display);
+    inicio();
+
+
+    glutMainLoop(); //Hace que aparezca la ventana
+    return EXIT_SUCCESS; //Puedes colocar tambien Return 0
+
+}

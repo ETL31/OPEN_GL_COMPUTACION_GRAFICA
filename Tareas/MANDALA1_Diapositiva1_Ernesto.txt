@@ -1,0 +1,140 @@
+#include <windows.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+#include<cmath>
+#include <stdlib.h>
+#define M_PI 3.1415
+
+float blanco[]={1,1,1};
+float negro[]={0,0,0},azul[]={0,0,1};
+float rojo[]={1,0,0},verde[]={0,1,0}, amarillo[]={1,1,0};
+float cyan[]={0,1,1}, rosa[]={1,0.5,0.5}, naranja[]={1,0.8,0}, gris[]={0.6,0.6,0.6};
+
+void inicio ()
+{
+    glMatrixMode(GL_PROJECTION);
+    int a=15;
+    gluOrtho2D(-a,a,-a,a);
+}
+
+void hojas(float *r, float *theta, int k, float n, float *color, float l, float p)
+{
+    glColor3fv(color);
+    switch (k)
+    {
+        case 1: {glPolygonMode(GL_FRONT_AND_BACK, GL_POINT); glPointSize(p); break;}
+        case 2: {glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); glLineWidth(l); break;}
+        case 3: {glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);break;}
+    }
+
+    glBegin(GL_POLYGON);
+
+    for (float i=0; i<n; i++)
+        {
+            glVertex2f(r[0]*cos(theta[0]+2*i*M_PI/5),r[0]*sin(theta[0]+2*i*M_PI/5));
+            glVertex2f(r[1]*cos(theta[1]+2*i*M_PI/5),r[1]*sin(theta[1]+2*i*M_PI/5));
+            glVertex2f(r[2]*cos(theta[2]+2*i*M_PI/5),r[2]*sin(theta[2]+2*i*M_PI/5));
+            glVertex2f(r[3]*cos(theta[3]+2*i*M_PI/5),r[3]*sin(theta[3]+2*i*M_PI/5));
+            glVertex2f(r[4]*cos(theta[4]+2*i*M_PI/5),r[4]*sin(theta[4]+2*i*M_PI/5));
+        }
+    glEnd();
+}
+
+
+void circulos (float *XY, float r, int k, int m, float theta1, float theta2, float n, float *color, float l,float p)
+{
+    glColor3fv(color);
+    switch (k)
+    {
+        case 1: {glPolygonMode(GL_FRONT_AND_BACK, GL_POINT); glPointSize(p); break;}
+        case 2: {glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); glLineWidth(l); break;}
+        case 3: {glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);break;}
+    }
+
+    glBegin(GL_POLYGON);
+
+    for(float i=0;i<n;i++)
+    {
+        for (float T=theta1 ; T<theta2 ;T=T+0.01)
+        {
+            switch (m)
+            {
+                case 1: glVertex2f(r*cos(T)+XY[0],r*sin(T)+XY[1]+2*r*i); break;
+                case 2: glVertex2f(r*cos(T)+XY[0]+2*r*i,r*sin(T)+XY[1]); break;
+                case 3: glVertex2f(r*cos(T)+XY[0],r*sin(T)+XY[1]);break;
+            }
+        }
+    }
+    glEnd();
+}
+
+void display(void)
+{
+    glClearColor(1,1,1,1);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    float a[]={0,0};
+    circulos(a,12,2,3,0,2*M_PI,1,negro,3,3);
+
+    for (int j=0; j<6;j++)
+        {
+            float d[]={8.01*cos(3*M_PI/10+2*j*M_PI/5),8.01*sin(3*M_PI/10+2*j*M_PI/5)};
+            circulos(d,sqrt(15.95),3,3,0,2*M_PI,5,blanco,3,3);
+            circulos(d,sqrt(15.95),2,3,0,2*M_PI,5,negro,3,3);
+        }
+
+    for (int j=0; j<6;j++)
+        {
+            float c[]={6.66*cos(3*M_PI/10+2*j*M_PI/5),6.66*sin(3*M_PI/10+2*j*M_PI/5)};
+            circulos(c,sqrt(12.25),3,3,0,2*M_PI,5,blanco,3,3);
+            circulos(c,sqrt(12.25),2,3,0,2*M_PI,5,negro,3,3);
+        }
+
+    float e[]={0,9.39,11,12,10.06};
+    float f[]={0,17*M_PI/30,8*M_PI/15,M_PI/2,19*M_PI/45};
+    hojas(e,f,3,6,blanco,3,3);
+    hojas(e,f,2,6,negro,3,3);
+
+    float g[]={0,12,0,0,0};
+    float h[]={0,M_PI/2,0,0};
+    hojas(g,h,2,6,negro,3,3);
+
+    for (int j=0; j<6;j++)
+        {
+            float b[]={5.43*cos(3*M_PI/10+2*j*M_PI/5),5.43*sin(3*M_PI/10+2*j*M_PI/5)};
+            circulos(b,3,3,3,0,2*M_PI,5,blanco,3,3);
+            circulos(b,3,2,3,0,2*M_PI,5,negro,3,3);
+        }
+
+    circulos(a,4.5,3,3,0,2*M_PI,1,blanco,3,3);
+    circulos(a,4.5,2,3,0,2*M_PI,1,negro,3,3);
+
+    circulos(a,2.5,3,3,0,2*M_PI,1,blanco,3,3);
+    circulos(a,2.5,2,3,0,2*M_PI,1,negro,3,3);
+
+    glutSwapBuffers();
+}
+
+
+int main(int argc, char *argv[])
+{
+    glutInit(&argc, argv); //Inicializar la ventana
+
+    glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE|GLUT_DEPTH);//Especifica el tipo de modo de visualizacion al crear una ventana(Activa el buffer de colores de tipo RGB
+
+    glutInitWindowPosition(10,10);//Posicion de la ventana
+    glutInitWindowSize(600,600); //Tamaño de la ventana
+    glutCreateWindow("MandalaPractica"); //Nombre que se le da a la ventana
+    glutDisplayFunc(display);
+
+
+    inicio();
+
+
+    glutMainLoop(); //Hace que aparezca la ventana
+    return EXIT_SUCCESS; //Puedes colocar tambien Return 0
+
+}

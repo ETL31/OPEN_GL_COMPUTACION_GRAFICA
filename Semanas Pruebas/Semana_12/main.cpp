@@ -1,0 +1,160 @@
+#include<windows.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+#include<cmath>
+#include <stdlib.h>
+
+//#define M_PI 3.1415
+
+float blue[]={0,0,1}, green[]={0,1,0}, orange[]={0.9,0.6,0.1}, cyan[]={0,1,1}, red[]={1,0,0}, yellow[]={1,1,0};
+float purple[]={1,0,1}, white[]={1,1,1}, black[]={0,0,0}, brown[]={0.5,0.35,0.05}, pink[]={0.9,0.7,0.7};
+
+void Linea(float *X0, float *X1, float *C, float A = 1, int f = 1, int P = 0)
+{
+  glColor3fv(C);
+  glLineWidth(A);
+  glEnable(GL_LINE_STIPPLE);
+       switch (P)
+       {
+        case 1: glLineStipple (f, 0x0101); break;
+        case 2: glLineStipple (f, 0xAAAA); break;
+        case 3: glLineStipple (f, 0x00FF); break;
+        case 4: glLineStipple (f, 0x0c0F); break;
+        case 5: glLineStipple (f, 0x1C47); break;
+        default: glLineStipple (f, 0xFFFF); break;
+       }
+glBegin(GL_LINES);
+glVertex3fv(X0);
+glVertex3fv(X1);
+glEnd();
+glDisable(GL_LINE_STIPPLE);
+glLineWidth(1);
+}
+
+
+void Ejes(int c)
+{ float P[]={-20.0,0.0,0.0} , P1[]={20.0,0.0,0.0};
+  float P2[]={0.0,-20.0,0.0}, P3[]={0.0,20.0,0.0};
+  float P4[]={0.0,0.0,-20.0} , P5[]={0.0,0.0,20.0};
+  float C1[]={1,0,0}, C2[]={0,0,1}, C3[]={0,1,0};
+switch (c)
+{ // linea punteada
+case 0:
+    {
+     Linea(P,P1,C1,2,2,1);
+     Linea(P2,P3,C2,2,2,1);
+     Linea(P4,P5,C3,2,2,1);
+     break;
+    }
+default :
+    { // linea solida de grosor c
+      Linea(P,P1,C1,c);
+      Linea(P2,P3,C2,c);
+      Linea(P4,P5,C3,c);
+    }
+}
+}
+
+//GLUquadric * gluNewQuadric ();
+//void gluQuadricNormals (GLUquadric * wheel1, GLenum GL_SMOOTH)
+//    gluCylinder (wheel1, 1.0, 1.0, 0.4, 1, 16);
+
+
+
+void display(void)
+{
+    glClearColor(0,0,0,0);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+    gluLookAt (5,5, 5, 0, 0, 0, 0, 1, 0);
+    Ejes(1);
+    glColor3f(1,0,1);
+
+    glScalef(3,3,3);
+    glutWireTetrahedron();
+    glScalef(0.58,0.58,0.58);
+    glutWireOctahedron();
+    glutSwapBuffers();
+}
+
+
+void display1(void)
+{
+    glClearColor(0,0,0,0);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+    gluLookAt (5,5, 5, 0, 0, 0, 0, 1, 0);
+    Ejes(1);
+    glColor3f(1,0,1);
+
+
+    glScalef(3,3,3);
+    glutWireTetrahedron();
+    glScalef(0.58,0.58,0.58);
+    glutWireOctahedron();
+
+
+    glScalef(0.4,0.4,0.4);
+    glTranslated(0,2.1,0);
+    glutWireOctahedron();
+
+
+    glScalef(0.5,0.5,0.5);
+    glTranslated(0,1.65,0);
+    glutWireOctahedron();
+
+
+    glTranslated(-1,-2,-1);
+    glutWireOctahedron();
+
+    glTranslated(-1.5,-2,0.8);
+    glutWireOctahedron();
+
+     glTranslated(2,0,-2.7);
+    glutWireOctahedron();
+
+
+
+
+
+
+
+
+
+    glutSwapBuffers();
+}
+
+
+
+void reshape (int w,int h)
+{
+    glViewport(0,0,(GLsizei)w,(GLsizei)h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glFrustum (-1.0, 1.0, -1.0, 1.0, 1.5, 20.0);
+    //glOrtho(-3.0, 3.0, -3.0, 3.0, 1.5, 20.0);
+    glMatrixMode(GL_MODELVIEW);
+
+}
+
+int main(int argc, char *argv[])
+{
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+    glutInitWindowSize(600,600);
+
+    glutInitWindowPosition(1,1);
+    glutCreateWindow("Gráficas 3D");
+    glutDisplayFunc(display);
+    glutReshapeFunc(reshape);
+
+    glutInitWindowPosition(650,1);
+    glutCreateWindow("Gráficas 3D");
+    glutDisplayFunc(display1);
+    glutReshapeFunc(reshape);
+    glutMainLoop();
+    return EXIT_SUCCESS;
+}

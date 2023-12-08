@@ -1,0 +1,185 @@
+
+
+#include <windows.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+
+#include <stdlib.h>
+#include <math.h>
+#include <cstdlib>
+
+using namespace std;
+void Cubo();
+void Tamano(int anch,int alto);
+void tiempo(int param);
+
+
+typedef struct _Vct
+{
+double x,y,z;
+} Vct;
+
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT= 600;
+const double PI=3.14159265;
+
+double radian;
+double speed=10;
+double rot;
+
+Vct pos;
+Vct vel;
+Vct dir;
+Vct dis;
+Vct mouseCoords;
+
+
+void Cubo(void)
+{
+    glClear(GL_COLOR_BUFFER_BIT); //bora toda la pantalla
+
+    glOrtho(-SCREEN_WIDTH/2,SCREEN_WIDTH/2,-SCREEN_HEIGHT/2,-SCREEN_HEIGHT/2, -100, 100);
+
+    glPushMatrix();
+
+    glRotatef(rot,0.0f,0.0f,1.0f); //rotacion
+
+    glBegin(GL_LINES);
+
+    glColor3f(1.0,0.0,1.0);
+
+    glVertex3f(0.0,0.0,0.0);
+    glVertex3f(0.0,0.0,5.0);
+
+    glColor3f(1.0,0.0,0.0);
+
+    glVertex3f(0.0,0.0,0.0);
+    glVertex3f(0.0,5.0,0.0);
+
+    glColor3f(0.0,1.0,1.0);
+
+    glVertex3f(0.0,0.0,0.0);
+    glVertex3f(5.0,0.0,0.0);
+
+    glColor3f(0.0,1.0,1.0);
+
+    glVertex3f(0.0,0.0,5.0);
+    glVertex3f(5.0,0.0,5.0);
+
+    glColor3f(1.0,0.0,1.0);
+
+    glVertex3f(0.0,5.0,0.0);
+    glVertex3f(0.0,5.0,5.0);
+
+    glColor3f(0.0,1.0,1.0);
+
+    glVertex3f(0.0,0.0,5.0);
+    glVertex3f(5.0,0.0,5.0);
+
+    glColor3f(0.0,1.0,1.0);
+
+    glVertex3f(0.0,5.0,5.0);
+    glVertex3f(5.0,5.0,5.0);
+
+    glColor3f(1.0,0.0,1.0);
+
+    glVertex3f(5.0,5.0,5.0);
+    glVertex3f(5.0,5.0,0.0);
+
+    glColor3f(1.0,0.0,0.0);
+
+    glVertex3f(5.0,0.0,5.0);
+    glVertex3f(5.0,5.0,5.0);
+
+    glColor3f(1.0,0.0,0.0);
+
+    glVertex3f(0.0,5.0,5.0);
+    glVertex3f(0.0,0.0,5.0);
+
+    glColor3f(1.0,0.0,0.0);
+
+    glVertex3f(5.0,0.0,0.0);
+    glVertex3f(5.0,5.0,0.0);
+
+    glColor3f(0.0,1.0,1.0);
+
+    glVertex3f(0.0,5.0,0.0);
+    glVertex3f(5.0,5.0,0.0);
+
+    glColor3f(1.0,0.0,1.0);
+
+    glVertex3f(5.0,0.0,0.0);
+    glVertex3f(5.0,0.0,5.0);
+
+    glEnd();
+
+    glPopMatrix();
+    glutSwapBuffers();
+
+    }
+
+void mouse(int btn, int state, int x, int y)
+{
+    mouseCoords.x=x-SCREEN_WIDTH/2;
+    mouseCoords.y=-y+SCREEN_HEIGHT/2;
+}
+
+void Move()
+{
+    dis.x=mouseCoords.x-pos.x;
+    dis.y=mouseCoords.y-pos.y;
+    if(sqrt(dis.y*dis.y+dis.x*dis.x)<speed){
+        pos.x=mouseCoords.x;
+        pos.y=mouseCoords.y;
+    }
+    else{
+        radian=atan2(dis.y,dis.y);
+        pos.x+=cos(radian)*speed;
+        pos.y+=sin(radian)*speed;
+        rot=radian*180/PI;
+    }
+}
+
+void tiempo(int value)
+{   Move();
+    glutPostRedisplay();
+    glutTimerFunc(10,tiempo,0);
+}
+
+void init(void)
+{
+    glClearColor(0.0,0.0,0.0,0.0);
+    glShadeModel(GL_FLAT);
+}
+
+void Tamano(int anch,int alto)
+{   if(alto==0) alto=1;
+    float razon=1.0*anch/alto;
+    glMatrixMode(GL_PROJECTION); //Activa la proyeccion
+    glLoadIdentity();    //Genera la imagen
+    glViewport(0, 0, anch, alto);
+    gluPerspective(50.0,razon,1,1000); //Acomoda el tamaño
+    glMatrixMode(GL_MODELVIEW); //Activa la nueva imagen
+    glLoadIdentity(); //Genera la imagen
+    gluLookAt(6.0,12.0,15.0, //la camara
+              0.0,0.0,0.0, //donde obsera la camara
+              0.0,1.0,0.0); //eje principal
+}
+
+int main(int argc, char** argv)//argumentos
+{
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGB);
+    glutInitWindowPosition(SCREEN_WIDTH,SCREEN_HEIGHT);
+    glutCreateWindow("Cubo");
+    init();
+    glutDisplayFunc(Cubo);
+    glutMouseFunc(mouse);
+    glutReshapeFunc(Tamano);
+    glutTimerFunc(10,tiempo,0);
+    glutMainLoop();
+    return 0;
+}

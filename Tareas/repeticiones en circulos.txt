@@ -1,0 +1,95 @@
+#include <windows.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+#include<cmath>
+#include <stdlib.h>
+#define M_PI 3.1415
+
+float blanco[]={1,1,1};
+float black[]={0,0,0},azul[]={0,0,1};
+float rojo[]={1,0,0},verde[]={0,1,0}, amarillo[]={1,1,0};
+float cyan[]={0,1,1}, rosa[]={1,0.5,0.5}, naranja[]={1,0.8,0}, gris[]={0.6,0.6,0.6};
+
+void inicio ()
+{
+    glMatrixMode(GL_PROJECTION);
+    int a=1;
+    gluOrtho2D(-a,a,-a,a);
+}
+
+void Circunferencia(float*XY, float R, float*rgb, int M, float T){
+glColor3fv(rgb);
+    switch(M){
+        case 2: {
+        glPolygonMode(GL_FRONT_AND_BACK,GL_POINT);
+        glPointSize(T); break;
+        }
+        case 3: {
+        glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+        glLineWidth(T); break;
+        }
+        default: {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        }
+    }
+    glBegin(GL_POLYGON);
+        for (float i = 0; i <= 2*M_PI; i = i+0.01)
+        glVertex2f(R*cos(i) + XY[0], R*sin(i) + XY[1]);
+    glEnd();
+}
+
+
+void display(void){
+    glClearColor(1,1,1,1);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+
+float C[]={0,0};
+Circunferencia(C, 0.80, black, 3, 4);
+Circunferencia(C, 0.75, black, 3, 4);
+Circunferencia(C, 0.50, black, 3, 4);
+
+for (int i = 0; i < 8; i++)
+{ float C1[] = { 0.5*cos(i*M_PI_4) , 0.5*sin(i*M_PI_4) };
+  Circunferencia(C1, 0.07, black, 3, 4);
+  Circunferencia(C1, 0.13, black, 3, 4);
+  Circunferencia(C1, 0.19, black, 3, 4);
+}
+
+for (int i = 0; i < 8; i++)
+    { float C2[] = { 0.16*cos(i*M_PI_4) , 0.16*sin(i*M_PI_4) };
+       Circunferencia(C2, 0.14 , black, 3, 4);
+    }
+
+for (int i = 0; i < 8; i++)
+    {float C3[] = { 0.62*cos((2*i-1)*M_PI/8) , 0.62*sin((2*i-1)*M_PI/8) };
+      Circunferencia(C3, 0.02, black, 3, 4);
+      Circunferencia(C3, 0.05, black, 3, 4);
+}
+
+
+
+    glutSwapBuffers();
+}
+
+int main(int argc, char *argv[])
+{
+    glutInit(&argc, argv); //Inicializar la ventana
+
+    glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE|GLUT_DEPTH);//Especifica el tipo de modo de visualizacion al crear una ventana(Activa el buffer de colores de tipo RGB
+
+    glutInitWindowPosition(10,10);//Posicion de la ventana
+    glutInitWindowSize(600,600); //Tamaño de la ventana
+    glutCreateWindow("EstrellaRara"); //Nombre que se le da a la ventana
+    glutDisplayFunc(display);
+
+
+    inicio();
+
+
+    glutMainLoop(); //Hace que aparezca la ventana
+    return EXIT_SUCCESS; //Puedes colocar tambien Return 0
+
+}
